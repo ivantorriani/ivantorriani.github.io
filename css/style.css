@@ -27,21 +27,26 @@ main {
 .post-gallery {
   margin-top: 2rem;
 }
-.post-gallery h3 {
-  margin-bottom: 1rem;
-  color: #2c3e50;
+
+/* if you’re floating it beside text */
+.post-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
 }
+.post-wrapper article { flex: 2; }
+.post-wrapper .post-gallery { flex: 1; }
+
 .post-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
+  justify-content: flex-start;
 }
+
 .post-gallery-grid img {
-  width: 100%;
+  flex: 0 0 200px;
   height: auto;
   border-radius: 8px;
   transition: transform .3s ease;
-}
-.post-gallery-grid img:hover {
-  transform: scale(1.05);
 }
