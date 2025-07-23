@@ -1,4 +1,4 @@
-/* css/style.css */
+/*body styles*/
 body {
   font-family: 'Times New Roman', Times, serif;
   line-height: 1.6;
@@ -23,7 +23,7 @@ main {
   margin: auto;
 }
 
-/* Post Gallery Styles */
+/* picture */
 .post-gallery {
   margin-top: 2rem;
 }

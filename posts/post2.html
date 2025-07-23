@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My First Post</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../index.html#gallery">Gallery</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>PyTorch, Computational Graphs, Gradients</h2>
+      <p><em>July 22, 2025</em></p>
+<p> 
+Besides the project today was a good day. I’m enjoying what I’m doing. I want this project to turn out well; I want this to be a genuinely good, well ironed out implementation. No more half hazard, two weeks stints. I’m listening to ‘no more thinking tonight… (minecraft music /w soft rain) and i’m totally relaxed. I like working at night, and I love my new computer.
+</p>
+
+<p>
+Today I learned a lot, from implementing the network, to loading data, and a training loop
+</p>
+
+<p>
+We initialize a network with custom class with <code>num_inputs</code> and <code>num_outputs</code> corresponding to the size of each of our batches, and a desired representation of the data. I then learned how to create layers, mainly linear layers represented by \( z = w_1 x_1 + b \) with \( w_1 \in \mathbb{R}^{n} \), where \( n \) can be adjusted based on our desired —right now it’s a bit arbitrary. We also have a forward function to pass through our network once, and be able to calculate loss and so forth. 
+</p>
+
+<p>
+Dataset loaders are kinda self explanatory. We’re going to create a custom <code>class Dataset(Dataset) </code> class with the torch functionalities, and create functionality in order to get features and labels (as in the input and the expected output).  Then we’re going to use a data loader that will be used when we train the model to pass our data in, with helpful functionalities like <code> batch_size </code> and <code> num_workers </code>. 
+</p>
+
+<p>
+Finally, I learned about a basic training loop. After calling our custom model class, setting up the optimizer with the learning rate, and setting the amount of epochs, we begin. We iterate for the value stored in epochs times, each time taking a full forward pass through the model, iterating through our data batch, and calculating loss
+</p>
+
+<p>
+For the most interesting part, after we have calculated the loss of every feature and label, we need to improve the model, right? This is where backpropogation happens, or the calculation of gradients: 
+</p>
+
+<p>
+$$
+\frac{\partial loss}{\partial w_1} \wedge \frac{\partial loss}{\partial b}
+$$
+</p>
+
+<p>
+While this is not totally understood, I know that it is able to optimize the parameters for the next pass. Super interesting. Finally, I learned about some functions that I just copy pasted in order to compute the accuracy of the model after training, and loading the model. 
+</p>
+
+<p>
+As I finish up the PyTorch primer, I’m ready to start getting into his book. Before I get into the book, I want to learn from some mistakes from my other attempts to teach myself things. In the case of Deep Learning with PyTorch, I didn’t gain much because I never built anything — I did practice problems (maybe), I reiterated textbook examples. What good is that? How am I going to make this experience better? I think about school courses, where I do my best work (unfortunately). I think it’s the incentive to prove my work is quality without relying on anything is what pushes me to learn best and make sure my understand is sound.
+</p>
+
+<p>
+I think I have a couple takeaways. Firstly — build. Learn concepts, great, make sure they are solid and that you can interact with them, but please learn from actually building the project. Possibly, what I can do, is <strong> build as I go </strong>. Another thing is to create incentive. I already know that I could bring a variation of this project back to project lead. I could possibly have a really, really impressive project if I am able to have a quality base. So keep that in mind — build this project as a really strong base so that the project does really good. 
+</p>
+
+
+<p>
+If I can optimize my learning by learning by building, and at the same time maintain extreme quality through incentive that I could bring this back to make an extremely impressive quarterly project, I think I can get a lot from this experience. Goodnight. 
+</p>
+
+    </article>
+
+
+    <section class="post-gallery">
+      <h3>Photos for This Post</h3>
+      <div class="post-gallery-grid">
+        <img src="../photos/6-23/data-loader-class.png" alt="Description 1">
+        <img src="../photos/6-23/data-loaders.png" alt="Description 2">
+        <img src="../photos/6-23/example-training.png" alt="Description 2">
+        <img src="../photos/6-23/multi-layer-network.png" alt="Description 2">
+        <img src="../photos/6-23/optimized-data-loading.png" alt="Description 2">
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Ivan/p>
+  </footer>
+</body>
+</html>
