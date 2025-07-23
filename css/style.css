@@ -1,4 +1,3 @@
-/*body styles*/
 body {
   font-family: 'Times New Roman', Times, serif;
   line-height: 1.6;
@@ -36,11 +35,11 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: flex-start; /* or center if you like */
+  justify-content: flex-start; 
 }
 
 .post-gallery-grid img {
-  flex: 0 0 200px;    /* always 200px wide */
+  flex: 0 0 150px;    
   height: auto;
   border-radius: 8px;
   transition: transform .3s ease;
