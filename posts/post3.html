@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Third Post</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Understanding Embeddings, Encoding, Decoding (Simple / Byte) </h2>
+      <p><em>July 23, 2025</em></p>
+        <p>
+        Today I learned the concepts and application of LLM embeddings. 
+        </p>
+
+        <p>
+        One of the big ideas is that LLM’s produce text one word at a time, based on the context of the previous few words. This is a concept called ‘sliding windows’, which I will get into later. It also explains why almost all LLM’s seem to ‘stream’ out words, where it seems like it’s typing it out, but it’s actually using context to write out words one at a time. 
+        </p>
+
+        <p>
+        Usually, and I don’t understand how accurate my language is when I’m saying this, but I’ll call them the ‘datasets’ used to map word similarity are incredibly interesting. They are mapped in \( \mathbb{R}^{n} \) space, where you can expect certain pairings like Cat and Dog, or Cat and Mouse, to be relatively aligned. You may also find Dog and Bone in the same area, but not as close as something like ‘pet’.  You’ll notice that higher level models like GPT have huge datasets mapping these similarities. 
+        </p>
+
+        <p>
+        Now for the specifics. Obviously machines can’t work with words during training, so it is required to split sentences into tokens. So, the sentence “The Cat and the Mouse” would become <code>[‘The’, ‘Cat’, ‘and’, ‘the’, ‘Mouse’] </code>. Most novice computer scientists would say this is a simple <code>text.split(‘ ‘)</code> command, but to account for the multiple punctation that appears in text like ‘,’ ,’—‘, ‘:’, etc… you have to use a more robust <code> re.split('([,.:;?_!"()\s]|--)' </code>. 
+        </p>
+
+        <p>
+        Now, each word is mapped to a vector representing a space in                       \ ( \mathbb{R}^{n} \). The entire implementation is below.
+        </p>
+
+        <p>
+        <pre><code>
+        class SimpleTokenizerV1:
+            def __init__(self, vocabulary):
+                self.str_to_int = vocabulary
+                self.int_to_str = {i:s for s,i in vocabulary.items()}
+
+            def encode(self, text):
+                preprocessed = re.split('([,.:;?_!"()\s]|--)', text)
+                preprocessed = [
+                    item.strip() for item in preprocessed if item.strip()
+                ]
+                ids = [self.str_to_int[s] for s in preprocessed]
+                return ids
+
+            def decode(self, ids):
+                text = " ".join([self.int_to_str[i] for i in ids])
+                text = re.sub(r'\s+([,.?!"()\'])', r'\1', text)
+                return text
+        </code></pre>
+        </p>
+
+        <p>
+        However, these custom classes can only include words you feed it. It’s more optimal to just use a premade class from <code> tiktoken </code> or something in order to handle more diverse text and save a lot of time. 
+        </p>
+
+
+        <p>
+        The final concept I learned today was sliding windows used for created training data. As I mentioned earlier, models are trained by predicting the next word based on context. “The Cat and the” sentence could have a high change of being followed by “Hat” or “Dog”, for example. However, for the machine to make this assumption, it has to be trained on a huge amount of text data so that it can make the correct assumption. In encoded format, we would give the context label as something like <code> [1523, 123, 521, 123] </code> and a truth label <code>[942] </code>. After a lot of examples it should link the context to the label make an accurate prediction. 
+        </p>
+
+        <p>
+        Now onto a personal dump. Honestly, today was not my most efficient performance. I’m honestly using my phone too much, when I wake up and in dead time. For example this morning I could barely even stay focused when listening to the morning thing because I want so dopamine crazed. Tomorrow morning I think I’m just going to detox for a little in the morning and I’ll probably get out the door sooner and everything. Also, I got really distracted by those weird people at the library — I could barely focus on decoding a dsa bug and I basically gave up. I can’t do that either — either find a quieter place and a solo table or just cope bruh. But on the bright side I can always improve these things and optimize everything. I’ve net improved since last week and that is for sure, I just have to keep going. 
+        </p>
+
+    </article>
+
+
+    <section class="post-gallery">
+      <h3>Photos for This Post</h3>
+      <div class="post-gallery-grid">
+        <img src="../photos/6-24/byte-pair-better.png" alt="Description 1">
+        <img src="../photos/6-24/embedding-visualization.png" alt="Description 1">
+        <img src="../photos/6-24/sliding-window-code.png" alt="Description 1">
+        <img src="../photos/6-24/sliding-windows.png" alt=Description 1>
+        <img src="../photos/6-24/tokenizer-example.png" alt=Description 1>
+
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Ivan/p>
+  </footer>
+</body>
+</html>
