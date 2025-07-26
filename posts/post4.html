@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Third Post</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Finishing up Embeddings, Attention Mechanisms</h2>
+      <p><em>July 25, 2025</em></p>
+    <p>
+After the sliding windows concept, not much else happens. We use a formal dataset creator with <code> torch </code> and then load it into a dataset loader that we talked about earlier. There were a couple important ideas on how to adjust the hyperparameters of <code> num_workers </code> and <code> batch_size </code> when dealing with larger amounts of data, but besides that a lot off customary stuff. 
+</p>
+
+<p>
+<pre><code>
+import torch
+from torch.utils.data import Dataset, DataLoader
+import tiktoken
+
+# Initialize the tokenizer
+byte_tokenizer = tiktoken.get_encoding("gpt2")
+
+class GPTDatasetV1(Dataset):
+  '''
+  input: raw text, tokenizer selection, length of
+  '''
+  def __init__(self, txt, tokenizer, max_length, stride):
+      self.input_ids = []
+      self.target_ids = []
+
+      # Tokenize the entire text
+      token_ids = tokenizer.encode(txt, allowed_special={"<|endoftext|>"})
+      assert len(token_ids) > max_length, "Number of tokenized inputs must at least be equal to max_length+1"
+
+      # Use a sliding window to chunk the book into overlapping sequences of max_length
+      for i in range(0, len(token_ids) - max_length, stride):
+          input_chunk = token_ids[i:i + max_length]
+          target_chunk = token_ids[i + 1: i + max_length + 1]
+          self.input_ids.append(torch.tensor(input_chunk))
+          self.target_ids.append(torch.tensor(target_chunk))
+
+  def __len__(self):
+      return len(self.input_ids)
+
+  def __getitem__(self, idx):
+      return self.input_ids[idx], self.target_ids[idx]
+
+</code></pre>
+</p>
+
+<p>
+I did a few practice problems on this chapter, including splitting text, making vocab, and making a tokenizer from scratch. I did pretty good — maybe because it was nothing more than using dictionaries and so on but I can safely say I know how this process works, even though I can just import a tokenizer that is far more efficient
+</p>
+
+
+<p>
+Chapter 3 is on attention mechanisms. Haven’t got to the code yet, but some really interesting stuff.
+</p>
+
+<p>
+Right now, a setback we have with tokenization is thet the same word, even if they mean different things, are represented by the same vector. For example, bat (the animal) and bat (the baseball stick) would both be represented by the same point in space. This can obviously cause hiccups, because let’s say the model has been given inputs that have to do with cave stuff, and suddenly we start pulling in baseball terminology. 
+</p>
+
+<p>
+Attention mechanisms solve this problem by shifting the vectors of words based on the context from the sentence, both before and after the desired word. For example, let’s say the surrounding text is talking about caves, spiders, and railroads. Then, we would adjust the vector of the ‘bat’ word so it is closer to the location of caves, spiders, and railroads. In other words, the model is becoming contextually aware. 
+</p>
+
+<p>
+Today, I’m going to try and get through chapter 3. I’m also going to do some more neetcode problems on trees I’m having trouble. I have to pay the FEE, every day. Some work is fun some work is not it doesn’t matter, I have to do both. I'm also going to do some reaching out -- I underestimate the skill of just cold emailing for oppurtunity, so much of what I have is from just reaching out. I need to do that in mass. 
+</p>
+
+    </article>
+
+
+    <section class="post-gallery">
+      <h3>Photos for This Post</h3>
+      <div class="post-gallery-grid">
+        <img src="../photos/6-25/strides.png" alt="Description 1">
+        <img src="../photos/6-25/strides_again.png" alt="Description 1">
+        <img src="../photos/6-25/embedding-visualized.png" alt="Description 1">
+        <img src="../photos/6-25/full-scope" alt="Description 1">
+    
+
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Ivan/p>
+  </footer>
+</body>
+</html>
