@@ -20,7 +20,13 @@
     <article>
       <h2>Finishing up Embeddings, Attention Mechanisms</h2>
       <p><em>July 25, 2025</em></p>
-
+       <p>
+        In our previous walkthrough of creating attention mechanisms, we left out computations of \(W^{Q}, W^{T}, W^{V}\). This would be the final step in making a basic SelfAttention mechanism. 
+        </p>
+s
+        <p>
+        As with all weights encountered so far in LLM, we initialize them randomly. <code> W_query = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False) </code> is a replicable example of how we would initialize \(W^{Q}\). Now, using this new notation which I learned today, we can use torch’s <code> @ </code> notation in order to compute mass matrix multiplication in order to find the \((Q,K,V)\). The following <code> x_j @ W_query, x_j @ W_key, …</code> computes those variables and stores them in a tensor corresponding to each word in the sentence: $$Q_i = x_i W^Q, \quad K_j = x_j W^K, \quad V_j = x_j W^V$$ f
+        </p>
 
     </article>
 
