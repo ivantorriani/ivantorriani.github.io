@@ -20,11 +20,13 @@
     <article>
       <h2>Weight Implmentation, Self Attention</h2>
       <p><em>July 27, 2025</em></p>
-  <p>
+<p>
 Yesterday, we went over the implementation of weights into the self attention mechanism. We also covered the preliminary idea of masking.
 
 The idea of masking evolves into ‘dropouts’, a strategy where a certain ratio of the upper triangular matrix is also masked. It’s supposed to make training better.  So, the self attention class evolves to include dropouts. 
+</p>
 
+<p>
 However, we also need to evolve the self attention mechanism in another respect. Notice that we have only been passing one sentence tensors at a time. In a training sequence we obviously need to evolve that in order to take multiple at a time, most likely, to increase training efficiency and whatnot. The mathematics behind this is pretty important actually. I needed it to even understand what was going on. I make use of the \( \mathbb{R}^{i \times j \times k}\) notation a lot for sanity checks. 
 </p>
 
