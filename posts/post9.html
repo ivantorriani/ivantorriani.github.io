@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Blog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Praticing Self Attention Mechanisms</h2>
+      <p><em>July 29, 2025</em></p>
+<p>
+Like I mentioned yesterday, today I didn't read any new content. 
+I reimplemented all the functionalities and classes discussed in the chapter with 
+mostly only using an equation sheet, except for in built torch functions
+like linear and masking and some other stuff. Here are my notes and also the equation sheet
+i used. 
+
+</p>
+
+<div
+  style="
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    align-items: start;
+  "
+>
+  <img
+    src="../photos/6-29/Notes_1.JPG"
+    alt="Descriptive alt text"
+    style="width: 400px; height: auto; display: block;"
+  />
+  <img
+    src="../photos/6-29/equation-sheet.png"
+    alt="Descriptive alt text"
+    style="width: 400px; height: auto; display: block;"
+  />
+  <!-- add more imgs here as needed -->
+</div>
+<p>
+    These sessions where I just implement stuff from scratch are going well. It's 
+    really helping me solidify my understanding, and also find out what niches there
+    are that I might need to look back on. For example, I'm discovering that I'm having
+    a little bit of trouble with <code> d_in, d_out</code> and what exactly those are supposed to be
+    I'm also a little bit confused about <code> context_length</code>. Some of these are 
+    user designed, so that means that I tweak them in the development process and have no 
+    set value. That makes things a little bit harder but thats ok. 
+</p>
+
+<p>
+    Tomorrow I'm going to start chapter 4. This is a really exciting chapter. What lessons can 
+    I take away from this chapter? First of all, having mathematical explanations to the problems
+    or even just symbolic is  <strong> vital </strong> for me to reproduce them without referring to the code. 
+    It's also vital for me to understand it to begin with. I think one of most important is the space indications, especially when we start working in larger and larger batches. So make sure to implement that. 
+</p>
+
+<p>
+    Another thing I should take note of while I'm reading are those really niche functionalities, for example, 
+    <code> nn.Linear(d_in, d_out, bias=False)</code>. Those things should just be written in 
+    some place on the side so that I can refer to them when the time comes. It would also probably
+    be helpful to include a short description. 
+</p>
+
+<p>
+    Feeling pretty good about this project. I'm taking it a lot more serious than other projects. But 
+    its only a little over a week. I can only really call it a project if I spend at the very least up
+    till the school year start. 
+</p>
+    </article>
+
+
+    <section class="post-gallery">
+      <h3>Photos for This Post</h3>
+      <div class="post-gallery-grid">
+        <img src="../photos/6-28/multi-head.png" alt="Description 1">
+        <img src="../photos/6-28/other-head.png">
+      </div>
+    
+
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Ivan/p>
+  </footer>
+</body>
+</html>
