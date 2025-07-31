@@ -18,67 +18,98 @@
 
   <main>
     <article>
-      <h2>Praticing Self Attention Mechanisms</h2>
-      <p><em>July 29, 2025</em></p>
-<p>
-Like I mentioned yesterday, today I didn't read any new content. 
-I reimplemented all the functionalities and classes discussed in the chapter with 
-mostly only using an equation sheet, except for in built torch functions
-like linear and masking and some other stuff. Here are my notes and also the equation sheet
-i used. 
+      <h2>Early Explorations of GPT Architecture</h2>
+      <p><em>July 30, 2025</em></p>
 
-</p>
+      <p>
+       Today I started with implementing text chapter 4. Immediately, it threw at me the complete architecture of a simple gpt model. I know that it keeps going pretty quickly and starts using the model to create simple logits, but I wanted to go through it and just break apart the class functionalities first. 
+       </p>
 
-<div
-  style="
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 20px;
-    justify-items: center;
-    align-items: start;
-  "
->
-  <img
-    src="../photos/6-29/Notes_1.JPG"
-    alt="Descriptive alt text"
-    style="width: 400px; height: auto; display: block;"
-  />
-  <img
-    src="../photos/6-29/equation-sheet.png"
-    alt="Descriptive alt text"
-    style="width: 400px; height: auto; display: block;"
-  />
-  <!-- add more imgs here as needed -->
-</div>
-<p>
-    These sessions where I just implement stuff from scratch are going well. It's 
-    really helping me solidify my understanding, and also find out what niches there
-    are that I might need to look back on. For example, I'm discovering that I'm having
-    a little bit of trouble with <code> d_in, d_out</code> and what exactly those are supposed to be
-    I'm also a little bit confused about <code> context_length</code>. Some of these are 
-    user designed, so that means that I tweak them in the development process and have no 
-    set value. That makes things a little bit harder but thats ok. 
-</p>
+      <p>
+      First thing, I think I left some holes in my understanding of the embeddings chapter. So basically, there are token embeddings and positional embeddings. Token embeddings map each token corresponding to a word to a n-dimensional space. Position embeddings map each location corresponding to a word to a n-dimensional space. It’s complicated and I had a hard time understanding it so I somewhat put a black box around it. However, it does make sense that both words and their locations have to have spatial significance. To put into perspective, ‘I’m scared of alligators and crocodiles and…’ showcases the significance of token embeddings, because naturally alligators and crocodiles should be roughly in the same spatial location (although that happens during training, not right off the bat’. But for positional embeddings, ‘The alligator ate the deer’ has a lot difference significance than ‘the deer ate the alligator’ even though they have the same words. In summary, we both have to consider the significance of the words, and the order they are put in. 
+      </p>
 
-<p>
-    Tomorrow I'm going to start chapter 4. This is a really exciting chapter. What lessons can 
-    I take away from this chapter? First of all, having mathematical explanations to the problems
-    or even just symbolic is  <strong> vital </strong> for me to reproduce them without referring to the code. 
-    It's also vital for me to understand it to begin with. I think one of most important is the space indications, especially when we start working in larger and larger batches. So make sure to implement that. 
-</p>
+      <p> 
+        The first lines that come up in reference to this is <code> tself.tok_emb = nn.Embedding(cfg["vocab_size"], cfg["emb_dim"]) </code> 
+        and <code> self.pos_emb = nn.Embedding(cfg["context_length"], cfg["emb_dim"]) </code>. 
+        These creates those positional and token embeddings I was talking about. Let's just focus on
+        <code> tok_emb</code> because the process is very similiar. Eventually, this is used 
+        in the forward pass function where it takes \(X\) as an argument. Mathematically: 
+      </p>
 
-<p>
-    Another thing I should take note of while I'm reading are those really niche functionalities, for example, 
-    <code> nn.Linear(d_in, d_out, bias=False)</code>. Those things should just be written in 
-    some place on the side so that I can refer to them when the time comes. It would also probably
-    be helpful to include a short description. 
-</p>
+      <div style="text-align: center;">
+      <img
+        src="../photos/6-30/math01.png"
+        alt="Descriptive alt text"
+        style="display: inline-block;
+              width: 400px;      /* shrink this to taste */
+              height: auto;"
+      />
+    </div>
 
-<p>
-    Feeling pretty good about this project. I'm taking it a lot more serious than other projects. But 
-    its only a little over a week. I can only really call it a project if I spend at the very least up
-    till the school year start. 
-</p>
+    <p>
+      Where (\(BS, SL, ED)\) represent \(\text{Batch Size, Sequence Length, Embedding Dimension}\). 
+      Basically what happened was that we recieved a tokenized batch of sentences at we created 
+      embeddings for them. A very similiar process happens with positions, but it looks a 
+      little different in the code. 
+    </p>
+
+    <p>
+      After we calculate the position embeddings, we want to rewrite the input \(X\) such 
+      that it is a vector representing both position and tokens. Since they are the same
+      shape, we just add them: 
+    </p>
+
+    <div style="text-align: center;">
+      <img
+        src="../photos/6-30/math02.png"
+        alt="Descriptive alt text"
+        style="display: inline-block;
+              width: 500px;      /* shrink this to taste */
+              height: auto;"
+      />
+    </div>
+
+    <p>
+      Now, this is interesting, because we go full circle back with what 
+      we were learning in the last chapter. This new input vector gets passed
+      through our attention mechanisms. These mechanisms will be stored
+      in the transformer module, though. Mathematically just to get a better look
+    </p>
+
+    <div style="text-align: center;">
+      <img
+        src="../photos/6-30/math03.png"
+        alt="Descriptive alt text"
+        style="display: inline-block;
+              width: 600px;      /* shrink this to taste */
+              height: auto;"
+      />
+    </div>
+
+    <p>
+      Finally, we calculate those logits. The logits are predictions of the next
+      tokens in unnormalized format. This is what it looks like to calculate: 
+    </p>
+
+      <div style="text-align: center;">
+      <img
+        src="../photos/6-30/math04.png"
+        alt="Descriptive alt text"
+        style="display: inline-block;
+              width: 500px;      /* shrink this to taste */
+              height: auto;"
+      />
+    </div>
+
+
+    <p>
+      While that is the architecture with one full pass through, it still
+      has a lot of holes in my understanding which will be ironed out in the next full days. 
+      some of these operations also have very niche lines of code that will need to be memorized.
+      Tomorrow, I'll head over through the chapter and try to pick them up along the way, 
+      and i think I made ther right decision to just focus on this today.
+    </p>
     </article>
 
 
