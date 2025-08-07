@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Blog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Model Outputs, Cross Entropy, other Evaluations</h2>
+      <p><em>August 6, 2025</em></p>
+    
+    <p>
+      We went over this briefly yesterday, but it's useful to look into it a bit more. 
+      So, the shape of the input is of Batch Size * Sequence Length * Embedding Dimension. The
+      output size is of Batch Size * Sequence Length * Vocab Size. The input was well covered, 
+      the output was not so well covered. Here's our justification for last time. Apparently we 
+      wanted to focus on the very last vector in the output logits, so the last row. However, all rows 
+      are significant. Remember, each row is of size Vocab Size. This means that each row has the probabilities 
+      for the next token. So, in summary, remember that all rows are predictions. The sliding window problem and the 
+      dataset setup results in a process such that multiple predictions are being made per sequeunce. 
+      This photo is pretty helpfulu:
+    </p>
+    <div style="text-align: center;">
+      <img
+        src="../photos/8-6/pic02.png"
+        alt="Descriptive alt text"
+        style="display: inline-block;
+              width: 600px;      /* shrink this to taste */
+              height: auto;"
+      />
+    </div>
+    
+
+
+   
+
+
+
+
+
+    
+  
+    </article>
+
+
+    
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Ivan </p>
+  </footer>
+</body>
+</html>
