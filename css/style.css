@@ -7,7 +7,7 @@ body {
   padding: 0;
 }
 header, footer {
-  background: url('../photos/backgrounds/backdrop.png') no-repeat center center;
+  background: url('../photos/backgrounds/cars_background.jpg') no-repeat center center;
   background-size: cover;
   opacity:.5;
   color: #f5f5f5;
