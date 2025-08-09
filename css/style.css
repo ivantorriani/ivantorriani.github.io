@@ -7,39 +7,77 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0 1rem;
-  
+  background: #f9f9f9;
 }
 
+/* Center, constrain & style main content like a paper */
 main {
   padding: 2rem;
-  max-width: 800px;      /* adjust to desired content width */
-  margin: 2rem auto;     /* vertical space + center block */
-  border: 1px solid #ccc;      /* light gray border */
-  border-radius: 4px;          /* slight rounding */
-  background: #fff;            /* white “paper” finish */
+  max-width: 800px;
+  margin: 2rem auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Header container, stacked layout */
 header {
-  background: url('../photos/backgrounds/cars_background.jpg') no-repeat center center;
+  display: flex;
+  flex-direction: column;        /* stack header rows */
+  align-items: flex-start;
+  background: url('../photos/backgrounds/dream_workplace.jpg') no-repeat center center;
   background-size: cover;
-  opacity: .5;
+  opacity: .8;
   color: #f5f5f5;
-  padding: 1rem;
+  padding: 1.5rem 2rem;
+}
+
+/* Top row: logo and title */
+header .header-top {
+  display: flex;
+  flex-direction: row;           /* ensure horizontal alignment */
+  align-items: center;           /* vertical centering */
+  gap: 1.5rem;
+}
+
+header .logo img {
+  height: 50px;
+  width: auto;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+/* Navigation row below */
+nav {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+nav a {
+  background: #fff;
+  color: #333;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+nav a:hover {
+  background: #f0f0f0;
 }
 
 footer {
   background: gray;
-  background-size: cover;
   opacity: .5;
   color: #f5f5f5;
   padding: 1rem;
-}
-
-nav a {
-  color: #fff;
-  margin-right: 1rem;
-  text-decoration: none;
 }
 
 .intro {
@@ -86,7 +124,7 @@ section.intro a:hover {
   background-color: #888edd;
 }
 
-/* Make the intro a two‑column flex box */
+/* Make the intro a two-column flex box */
 .intro-wrapper {
   display: flex;
   align-items: center;
