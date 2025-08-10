@@ -10,7 +10,6 @@ body {
   background: #f9f9f9;
 }
 
-/* Center, constrain & style main content like a paper */
 main {
   padding: 2rem;
   max-width: 800px;
