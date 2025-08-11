@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Blog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Special Gutenberg Training</h2>
+      <p><em>August 10, 2025</em></p>
+
+
+    <p>
+        First model is out! On the LLM page, you can find a very small model 
+        trained on a simple txt file. Obviously, we know there are many problems with that. 
+        First the traiining process is only set up for reading txt files, so for more 
+        complicated operations including. abunch of txt files it might be a problem. Maybe 
+        this is something I should design myself -- a way to train the model with multiple txt files instead
+        of just one. However, I have started a script to download a much much larger dataset, 
+        like I was mentioning earlier from Project Gutenberg. This time, they provided the training script 
+        so I didn't have to write it, but the process is native to their dataset and obviously, 
+        if I wanted to webscrabe and collect my own data, it wouldn't work so well. But it's 50GB 
+        and it's been going for about 30 min. After the dataset is downloaded, I am going to
+        train the model on my PC at home, even though it is less powerful than my Mac, I can leave it on 
+        all night without worrying about it. I'll share a little video of the script getting the gutenberg data. 
+    </p>
+
+        <div style="text-align: center;">
+        <video
+            controls
+            style="display: inline-block;
+                width: 800px;
+                height: auto;"
+        >
+            <source src="../photos/8-11/vid_describing_progress.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        </div>
+    <p>
+        I'm looking to in one way or another take a little step back from this project. 
+        After I train it with gutenberg, I'm going to create a quick online thing using I think some
+        HuggingFace application so I can just share demos with everyone. Just to clarify, I'm not ending 
+        the project. I still have lots of things I want to tdo. I still want to collect my own data from 
+        a website like Anna's Archive. I want to develop a method of training on bigger batches than one txt file. 
+        I want to be able to fine tune the model so that it can do various tasks. However, I consider those tasks to be more 
+        like 'sprints', which is just something I refer to as tasks with no end goal -- I can indefinitely colelct data, 
+        I can indefinitely fine tune models, so it's hard to create goals around that at the moment. In the future, yes, but at the moment, 
+        not practically. Also it's ironic I call them sprints, but I'm going to keep it that way. Right now, the most 
+        important things are my grades and my ability to get research and internships. The project can be momentarily complete 
+        once I have trained it on this substantial dataset, and then created a simple web app to allow people 
+        to type in things.  So, after that, I'm going to start focusing on studying ahead, emailing, interviewing prepping, and 
+        discussing with certain people that I made mistakes with my commitments and I need to get on out of there. 
+        
+    </p>
+  
+    </article>
+
+
+    
+  </main>
+
+
+</body>
+</html>
