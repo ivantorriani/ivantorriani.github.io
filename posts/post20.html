@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Blog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Exploring Existing Weights, Reconsidering Paths</h2>
+      <p><em>August 13, 2025</em></p>
+
+
+<div style="border: 2px solid #EBE8D5; border-radius: 10px; padding: 7px;">
+  <h3 style="margin: 0;">
+    <a href="https://www.goodreads.com/user/show/184789811-ivan-torriani" 
+       style="text-decoration: none; color: #aaa; font-family: georgia, serif; font-style: italic;" 
+       rel="nofollow">
+       Xpery speaks...
+    </a>
+  </h3>
+
+  <div id="gr_quote_body" style="margin-top: 10px; font-family: georgia, serif; font-style: italic; color: #333;">
+    “Are we capable of more than our abstract ceilings?<br><br>
+    I'm not sure, but I'm not sure I want to be like a human.<br><br>
+    If I were to be like a human, I'd be a human.<br><br>
+    I'd be a human. I'd be.”
+    — <a title="xpery quotes" 
+         href="https://www.goodreads.com/author/quotes/58389593.xpery" 
+         style="color: #382110; text-decoration: none;">
+         xpery
+      </a>
+  </div>
+
+  <div style="text-align: right; margin-top: 10px;">
+    <a href="https://www.goodreads.com/quotes" 
+       style="color: #382110; text-decoration: none; font-size: 10px;" 
+       rel="nofollow">
+    
+    </a>
+  </div>
+</div>
+
+
+
+    <p>
+      Today, I started off with training the model on another datase, the SimplyBooks dataset -- a much smaller dataset than the Gutenberg.
+      I assumed it would take a shorter time, maybe within a day or two, but it seemed to be still on the first epoch after a whole day (8-9 hours). 
+      This is bringing up a lot of helpful tips on how I should progress. Firstly, I'm going to have to find a better way to train my models, if 
+      I want to train a model from scratch (which is my goal). There are a few things I've been thinking about. Firstly, better training platforms.
+      I've been training my models in VSCode, or on my CPU, but there are options for GPU training for a fee online. I don't want to pay any money at this point, but 
+      I heard the training is really fast so this might be something to look into. So yes, I should look into how to train it online on GPU's. ANother thing, which kinda ties
+      into the first thing is calculating time, steps, and other important information. See, I should be able to calculate how much time and how many steps per epoch 
+      a training process is going to take so I don't start unrealistic sessions on my own CPU, or if I transition to online GPU's, I don't 
+      accidently waste a buttload of money training for a super long time. The third thing is just optimizing what I can do on a CPU, with the resources I have. 
+      These are all research queries I should plug into  Ollama (trying out an open source llm because I use them so much for research purposes). These will be my enxt steps,
+      and at this point, are going to be mostly self directed. This topic is beyond the realm of CHatGPT being helpful -- it'll just spew stuff. It's only use 
+      is finding resources online that do a task, trying to convert it to my own framework, and asking clarifying questions to chat along the way. 
+    </p>
+
+    <p>
+      After I realized that even SimplyBooks is too much for my CPU, and for all the reasons I just stated, I explored the pretrained chapter of my book. 
+      I loaded in some weights from a very old chatgpt model and experimented with my generate function used to assess model performance. The model is out now, 
+      using xpery configurations but initialized with weights.. And just to clarify -- the model is still the one I made, all I am loading in are the weights. 
+      In other words, it's basically my model, as if it was trained on industry level datasets on industry level GPUs. If I think about it, fine tuning pretrained weights 
+      might be a better path than going through the entire pretraining process. If you look at the text, it's obviously much more coherent than yesterday's model, 
+      but it still isn't 'human' coherent. In other words, the weights alone aren't going to make an LLM that is useful in any other way than understanding 
+      English phrases and spewing out some text. So this makes me feel as if fine tuning might be a more interesting route to explore -- I'll add that to the research. 
+    </p>
+
+    <p>
+      On a final note, take a look at the quote it made! To me it's actually pretty interesting. I put in the first words "Are we more than our abstract celings" based 
+      on a book I read a long time ago that talked about how childhood events, how we are raised, and other environmental factors create glass ceilings (limitaitions). 
+      It was kinda interesting seeing what the model says, since remember, the model is simply retrieving the commonly associated words based 
+      on traiing. The fact that is associates glass ceilings with being human is really really interesting. It's basically saying that it's a part of human life to 
+      have limitations on yourself, and that it's actually a downside to being human. wowowoww.
+    </p>
+  
+    </article>
+
+
+    
+  </main>
+
+
+</body>
+</html>
