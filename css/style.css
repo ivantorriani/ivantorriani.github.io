@@ -145,3 +145,46 @@ section.intro a:hover {
   margin-top: 0;
 }
 
+/*update text*/
+.intro.update {
+  background: linear-gradient(
+    135deg,
+    #2864e5,
+    #d649d4,
+    #fbc2eb,
+    #a1c4fd,
+    #c2e9fb
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 10s ease infinite;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  border: 2px solid rgba(255,255,255,0.5);
+}
+
+/* Big headline */
+.intro.update h1 {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+}
+
+/* Subheadline */
+.intro.update h2 {
+  font-size: 1.6rem;
+  font-style: italic;
+  margin: 0;
+  padding-top: 0.25rem;
+  border-top: 2px solid rgba(255,255,255,0.4);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
+}
+
+/* Gradient animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
