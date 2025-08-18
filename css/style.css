@@ -188,3 +188,365 @@ section.intro a:hover {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* huging face */
+/* ==== Hugging Face Repo button (yellow) ==== */
+:root {
+  --hf-yellow: #FFD21E;         /* primary Hugging Face yellow */
+  --hf-yellow-600: #E0B800;     /* shadow/pressed */
+  --hf-yellow-700: #B38F00;     /* deeper shadow */
+  --hf-text: #111;              /* high-contrast text */
+}
+
+/* Base */
+a.hugging_face_repo {
+  --pad-y: 0.55em;
+  --pad-x: 1.0em;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  color: var(--hf-text);
+
+  /* glossy yellow */
+  background:
+    radial-gradient(80% 80% at 25% 10%, rgba(255,255,255,0.7), transparent 45%),
+    linear-gradient(to bottom, #FFE769, var(--hf-yellow));
+  border: 2px solid #FFEAA0;
+  border-radius: 9999px;
+  padding: var(--pad-y) var(--pad-x);
+
+  position: relative;
+  overflow: hidden;
+
+  /* lift & depth */
+  box-shadow:
+    0 6px 0 0 var(--hf-yellow-600),
+    0 10px 18px rgba(0,0,0,0.15);
+  transform: translateY(0);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Hugging Face emoji badge */
+a.hugging_face_repo::before {
+  content: "🤗";
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+/* Hover: tiny lift + soft glow */
+a.hugging_face_repo:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 7px 0 0 var(--hf-yellow-700),
+    0 12px 20px rgba(0,0,0,0.18);
+  filter: saturate(1.05);
+}
+
+/* Active: pressed */
+a.hugging_face_repo:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 3px 0 0 var(--hf-yellow-700),
+    0 6px 12px rgba(0,0,0,0.12);
+}
+
+/* Accessible focus ring */
+a.hugging_face_repo:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(255,210,30,0.55),
+    0 0 0 6px rgba(17,17,17,0.65),
+    0 6px 0 0 var(--hf-yellow-600),
+    0 10px 18px rgba(0,0,0,0.15);
+}
+
+/* Subtle diagonal shine on hover */
+a.hugging_face_repo::after {
+  content: "";
+  position: absolute;
+  inset: -60% -20% auto auto;
+  width: 40%;
+  height: 220%;
+  transform: rotate(25deg) translateX(120%);
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  pointer-events: none;
+}
+a.hugging_face_repo:hover::after {
+  animation: hfShine 0.9s ease forwards;
+}
+
+/* Reduced motion: disable shine animation */
+@media (prefers-reduced-motion: reduce) {
+  a.hugging_face_repo,
+  a.hugging_face_repo:hover {
+    transition: none;
+  }
+  a.hugging_face_repo:hover::after {
+    animation: none;
+  }
+}
+
+/* Dark scheme tweaks */
+@media (prefers-color-scheme: dark) {
+  a.hugging_face_repo {
+    border-color: #FFEE9C;
+    box-shadow:
+      0 6px 0 0 var(--hf-yellow-600),
+      0 10px 18px rgba(0,0,0,0.35);
+  }
+}
+
+/* Shine keyframes */
+@keyframes hfShine {
+  0%   { transform: rotate(25deg) translateX(120%); opacity: 0.0; }
+  5%   { opacity: 1; }
+  100% { transform: rotate(25deg) translateX(-180%); opacity: 0; }
+}
+
+/* Optional compact variant */
+a.hugging_face_repo.sm {
+  --pad-y: 0.4em;
+  --pad-x: 0.8em;
+  font-weight: 600;
+}
+
+
+/* table */
+/* ==== Model table — Blue Minimal ==== */
+:root {
+  --ui-blue: #1465b7;        /* primary blue (you already use this) */
+  --ui-blue-600: #1465b7;    /* darker border line */
+  --ui-text: #111;
+  --ui-soft: #444;
+  --ui-border: #E5EEF8;      /* subtle borders */
+  --ui-row-hover: #F5F9FF;   /* soft hover */
+}
+
+body table.model_table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  overflow: hidden;          /* keeps rounded corners on header */
+  box-shadow: none;          /* minimal: no drop shadow */
+  font-family: 'EB Garamond', serif;
+}
+
+/* Header: flat blue, no gradients/shadows */
+.model_table thead th {
+  background: var(--ui-blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--ui-blue-600);
+}
+
+/* Cells: simple rhythm + hairline rows */
+.model_table td {
+  padding: 0.75rem 1rem;
+  color: var(--ui-soft);
+  border-bottom: 1px solid var(--ui-border);
+  vertical-align: middle;
+}
+
+/* Row hover: very light blue */
+.model_table tbody tr:hover {
+  background: var(--ui-row-hover);
+}
+
+/* Numeric alignment for Size column */
+.model_table th:nth-child(2),
+.model_table td:nth-child(2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Download column centered on desktop */
+.model_table th:nth-child(3),
+.model_table td:nth-child(3) {
+  text-align: center;
+}
+
+/* Minimal link styling: clean blue, underline on hover */
+.model_table td a[href] {
+  color: var(--ui-blue);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent; /* stable layout */
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.model_table td a[href]:hover {
+  border-bottom-color: currentColor;
+}
+.model_table td a[href]:focus-visible {
+  outline: 2px solid var(--ui-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Remove border under last row of each tbody */
+.model_table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Compact variant */
+.model_table.compact td,
+.model_table.compact th {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+/* Mobile: simple card stack with inline labels (no fancy effects) */
+@media (max-width: 640px) {
+  .model_table thead { display: none; }
+  .model_table, .model_table tbody, .model_table tr, .model_table td {
+    display: block;
+    width: 100%;
+  }
+  .model_table tr {
+    background: #fff;
+    border: 1px solid var(--ui-border);
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    overflow: hidden;
+  }
+  .model_table td {
+    border-bottom: 1px solid var(--ui-border);
+    position: relative;
+    padding: 0.7rem 1rem 0.7rem 7.5rem; /* room for labels */
+  }
+  .model_table td:last-child { border-bottom: none; }
+
+  /* Lightweight labels */
+  .model_table td:nth-child(1)::before { content: "Version"; }
+  .model_table td:nth-child(2)::before { content: "Size"; }
+  .model_table td:nth-child(3)::before { content: "Download"; }
+
+  .model_table td::before {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    color: var(--ui-blue);
+  }
+
+  /* Alignments on mobile */
+  .model_table td:nth-child(2),
+  .model_table td:nth-child(3) {
+    text-align: left;
+  }
+}
+
+/* ==== Post links — Blue Minimal Buttons ==== */
+:root{
+  --ui-blue:#1465b7;
+  --ui-blue-600:#0f4f8b;
+  --ui-blue-100:#e9f2ff;
+  --ui-text:#111;
+}
+
+/* Layout */
+.post-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem;
+  margin:1rem 0 1.25rem;
+}
+
+/* Buttony anchors */
+.post-links a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+
+  padding:.55em .95em;
+  border-radius:9999px;
+  text-decoration:none;
+  font-family:'EB Garamond',serif;
+  font-weight:700;
+  letter-spacing:.2px;
+  line-height:1.2;
+
+  color:#fff;
+  background: linear-gradient(180deg, #1a6fc5 0%, var(--ui-blue) 100%);
+  border:1px solid var(--ui-blue-600);
+
+  box-shadow:0 1px 0 rgba(0,0,0,.08);
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease,
+    background .2s ease,
+    color .2s ease;
+}
+
+/* Subtle motion cue */
+.post-links a::after{
+  content:"→";
+  font-weight:700;
+  opacity:.9;
+  transform:translateX(.1rem);
+  transition:transform .12s ease, opacity .12s ease;
+}
+
+/* Hover / active */
+.post-links a:hover{
+  transform:translateY(-1px);
+  box-shadow:0 3px 10px rgba(0,0,0,.10);
+  background: linear-gradient(180deg, #1d75cd 0%, #1669bb 100%);
+}
+.post-links a:hover::after{ transform:translateX(.25rem); opacity:1; }
+
+.post-links a:active{
+  transform:translateY(0);
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+
+/* Focus ring (accessible) */
+.post-links a:focus-visible{
+  outline:none;
+  box-shadow:
+    0 0 0 3px rgba(20,101,183,.25),
+    0 0 0 6px rgba(20,101,183,.35);
+}
+
+/* Minimal outline variant (use class="ghost" on any link) */
+.post-links a.ghost{
+  color:var(--ui-blue);
+  background:transparent;
+  border:1px solid var(--ui-blue-600);
+}
+.post-links a.ghost:hover{
+  background:var(--ui-blue-100);
+  box-shadow:none;
+}
+
+/* Option: stacked full-width on small screens */
+@media (max-width:640px){
+  .post-links{ gap:.5rem; }
+  .post-links a{ flex:1 1 100%; border-radius:12px; }
+}
