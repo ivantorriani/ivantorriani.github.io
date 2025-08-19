@@ -25,7 +25,7 @@ header {
   display: flex;
   flex-direction: column;        /* stack header rows */
   align-items: flex-start;
-  background: url('../photos/backgrounds/dream_workplace.jpg') no-repeat center center;
+  background: url('../photos/backgrounds/blue_nyc.jpg') no-repeat center center;
   background-size: cover;
   opacity: .8;
   color: #f5f5f5;
