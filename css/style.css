@@ -821,3 +821,119 @@ body table.model_table {
 @media (prefers-reduced-motion: reduce) {
   .intro.update { animation: none; background-position: 0 0, 50% 50%; }
 }
+
+/* github button */
+/* ========= GitHub Sparkle Chip (inline component) ========= */
+.gh-chip {
+  /* theme hooks */
+  --gh-start: #0ea5e9;   /* sky */
+  --gh-mid:   #6366f1;   /* indigo */
+  --gh-end:   #a855f7;   /* violet */
+  --gh-text:  #fff;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+
+  padding: .62rem .9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  line-height: 1;
+  color: var(--gh-text);
+  text-decoration: none;
+
+  background:
+    radial-gradient(120% 140% at 100% -20%,
+      var(--gh-start) 0%,
+      var(--gh-mid) 48%,
+      var(--gh-end) 100%);
+
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow:
+    0 8px 20px rgba(15,23,42,.25),
+    inset 0 1px 0 rgba(255,255,255,.25);
+
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gh-chip:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 14px 28px rgba(15,23,42,.28),
+    inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+.gh-chip:active { transform: translateY(0); }
+
+/* Icon + label */
+.gh-chip__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.15));
+  animation: gh-bob 3s ease-in-out infinite;
+}
+.gh-chip__label {
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
+
+/* Focus visibility */
+.gh-chip:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px rgba(99,102,241,.65),
+    0 14px 28px rgba(15,23,42,.28);
+}
+
+/* Sparkles stay with the component (no fixed pos) */
+.gh-chip__sparkles {
+  pointer-events: none;
+  position: absolute;
+  inset: -14px -18px -22px -18px;
+  z-index: -1;
+  background:
+    radial-gradient(6px 6px at 80% 25%, rgba(255,255,255,.95), rgba(255,255,255,0) 60%),
+    radial-gradient(5px 5px at 15% 70%, rgba(255,255,255,.9),  rgba(255,255,255,0) 60%),
+    radial-gradient(4px 4px at 55% 95%, rgba(255,255,255,.85), rgba(255,255,255,0) 60%),
+    radial-gradient(3px 3px at 95% 60%, rgba(255,255,255,.8),  rgba(255,255,255,0) 60%);
+  filter: blur(.5px) drop-shadow(0 3px 10px rgba(255,255,255,.25));
+  opacity: .65;
+  animation: gh-sparkle 4s linear infinite;
+}
+
+/* Size variants you can swap in */
+.gh-chip--sm { padding: .5rem .75rem; font-size: .9rem; }
+.gh-chip--lg { padding: .78rem 1.05rem; font-size: 1rem; }
+.gh-chip--ghost {
+  background: linear-gradient( to right, rgba(255,255,255,.08), rgba(255,255,255,.12) );
+  border-color: rgba(255,255,255,.18);
+}
+
+/* Motion + sparkle animations */
+@keyframes gh-bob {
+  0% { transform: translateY(0) }
+  50% { transform: translateY(-1.5px) }
+  100% { transform: translateY(0) }
+}
+@keyframes gh-sparkle {
+  0%   { transform: translateY(0) translateX(0); opacity: .55; }
+  25%  { transform: translateY(-2px) translateX(-1px); opacity: .8; }
+  50%  { transform: translateY(0) translateX(1px); opacity: .6; }
+  75%  { transform: translateY(2px) translateX(-1px); opacity: .85; }
+  100% { transform: translateY(0) translateX(0); opacity: .65; }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .gh-chip, .gh-chip:hover, .gh-chip__icon, .gh-chip__sparkles {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
