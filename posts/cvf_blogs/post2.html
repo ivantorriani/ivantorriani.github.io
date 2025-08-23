@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My First Post</title>
+  <link rel="stylesheet" href="../../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="../../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>Labeling Guidelines and GCP</h2>
+      <p><em>August 17, 2025</em></p>
+
+      <p>
+        Today I was going to label the rest of the dataset and work on training/evaluating. However, when I was looking into evaluating, 
+        I was reminded that evaluation of a model is based on ground truths of data, in other words, the labels. That means if my data is not labeled really well 
+        I might not be able to gain the most from evaluations. So I sent clarifiation emails to make sure that everything was following a guideline.
+      </p>
+
+        <div style="text-align: center;">
+      <img
+        src="../../photos/8-23/cloud.png"
+        alt="Descriptive alt text"
+        style="display: inline-block;
+              width: 500px;      
+              height: auto;"
+      />
+    </div>
+      <p> 
+        Moving forward, I also took a look at Google Cloud Platform. It involves opening up an account, starting a virtual machine in the cloud 
+        and then connecting to it via my terminal so I can use GPU's for computation on VSCode. Originally, I've experimented with training on Colab 
+        but I realized that there was a big issue with runtime and not being able to leave it training for a while. With GCP I won't have to worry and will be able to train indefinitely 
+        which is super cool.
+      </p>
+
+    </article>
+
+
+
+  </main>
+
+
+</body>
+</html>
