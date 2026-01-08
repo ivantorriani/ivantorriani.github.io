@@ -133,6 +133,22 @@ header h2 {
   z-index: 3;
 }
 
+.blueabout-body {
+  text-align: center;                 /* center the text */
+}
+
+.blueabout-body p {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 5rem;                    /* adjust to taste */
+  line-height: 1;                     /* tighter looks better for Bebas */
+  margin: 0;
+  font-weight:900;
+
+  display: inline-block;              /* needed for transform */
+  transform: scale(2.4, 2.0);        /* stretch (scaleX, scaleY) */
+  transform-origin: center;
+}
+
 /* IMPORTANT: remove opacity from the header container
    (opacity on the container would fade the text too) */
 
@@ -188,6 +204,8 @@ footer {
   max-width: 600px;
   margin: auto;
 }
+
+
 
 /* Picture gallery section */
 .post-gallery {
