@@ -152,6 +152,19 @@ header h2 {
 /* IMPORTANT: remove opacity from the header container
    (opacity on the container would fade the text too) */
 
+.floating-image{
+  position: fixed;          /* independent of your boxes */
+  top: -40px;               /* move it wherever you want */
+  left: 750px;
+
+  width: 1000px;             /* size */
+  height: auto;
+  
+
+  z-index: 3;            /* above everything */
+  pointer-events: none;     /* doesn’t block clicks (optional) */
+}
+
 
 /* Top row: logo and title */
 header .header-top {
