@@ -7,7 +7,7 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0 1rem;
-  background: #f9f9f9;
+  background: #fffefe;
 }
 
 main {
@@ -84,7 +84,7 @@ header h2 {
 .intro--video {
   position: relative;
   overflow: hidden;
-  min-height: 70vh;          /* ensures the video shows */
+  min-height: 60vh;          /* ensures the video shows */
   background: #000;          /* neutral fallback if video can’t load */
 }
 
@@ -119,7 +119,7 @@ header h2 {
   transform: translate(-50%, -50%);
   z-index: 2;
 
-  max-width: min(1200px, 100%);
+  max-width: min(5000px, 100%);
   height: auto;
   display: block;
 
@@ -151,6 +151,20 @@ header h2 {
 
 /* IMPORTANT: remove opacity from the header container
    (opacity on the container would fade the text too) */
+
+.floating-image{
+  position: fixed;          /* independent of your boxes */
+  top: -40px;               /* move it wherever you want */
+  left: 750px;
+  opacity:.5;
+  width: 1000px;             /* size */
+  height: auto;
+  
+
+  z-index: 3;            /* above everything */
+  pointer-events: none;     /* doesn’t block clicks (optional) */
+}
+
 
 .floating-image{
   position: fixed;          /* independent of your boxes */
@@ -1072,4 +1086,89 @@ body table.model_table {
     transition: none !important;
     transform: none !important;
   }
+}
+
+/* Keep title centered, but don't force the whole box to center-layout */
+.bio-box{
+  text-align: center;
+  padding-top: 11rem;     /* NOT 11rem */
+  padding-bottom: 2rem;
+}
+
+/* This is the only big text */
+.blueabout-body .bio-title{
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  margin: 0 0 1.5rem 0;
+  font-weight: 900;
+  display: inline-block;
+  transform: scale(5.4, 2.0);
+  transform-origin: center;
+}
+
+/* Side-by-side layout */
+.bio-row{
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  text-align: left;     /* overrides the centered parent */
+}
+
+/* Image MUST be smaller than the container so text can fit */
+.bio-smore{
+  width: 800px;         /* change this value as you like */
+  height: auto;
+  margin: 0;            /* kill the -20rem hack */
+  flex: 0 0 auto;
+  margin-left: -20rem;
+
+}
+
+/* About box on the right */
+.bio-text{
+  flex: 1;
+  min-width:5;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 0.9rem;    /* SMALLER */
+  line-height: 1.35;
+  font-weight: 400;     /* NOT heavy */
+  letter-spacing: -0.01em;
+
+  background: rgba(255,255,255,0.92);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+}
+
+/* Force your global giant paragraph rule to NOT apply here */
+.bio-text p{
+  margin: 0;
+  font-size: 4rem !important;
+  font-weight: 400 !important;
+  transform: none !important;
+  display: block !important;
+}
+
+.bio-text h3{
+  margin: 0 0 .5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  transform: none !important;
+}
+
+
+
+.blueabout-body .bio-title{
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  margin: 0 0 2rem 0;
+  font-weight: 900;
+  z-index: 50;
+
+  display: inline-block;
+  transform: scale(2.4, 2.0);
+  transform-origin: center;
+  text-align: center;
 }
