@@ -137,12 +137,12 @@ header h2 {
   text-align: center;                 /* center the text */
 }
 
-.blueabout-body p {
+.blueabout-body h1 {
   font-family: "Bebas Neue", sans-serif;
   font-size: 5rem;                    /* adjust to taste */
   line-height: 1;                     /* tighter looks better for Bebas */
   margin: 0;
-  font-weight:900;
+  font-weight:1200;
 
   display: inline-block;              /* needed for transform */
   transform: scale(2.4, 2.0);        /* stretch (scaleX, scaleY) */
