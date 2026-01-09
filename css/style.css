@@ -138,14 +138,16 @@ header h2 {
 }
 
 .blueabout-body h1 {
-  font-family: "Bebas Neue", sans-serif;
+  font-family: "Anton", system-ui, sans-serif;
   font-size: 5rem;                    /* adjust to taste */
   line-height: 1;                     /* tighter looks better for Bebas */
   margin: 0;
   font-weight:1200;
+  z-index: 999;
+  color: #FF2800;
 
   display: inline-block;              /* needed for transform */
-  transform: scale(2.4, 2.0);        /* stretch (scaleX, scaleY) */
+  transform: scale(2.4, 5.0);        /* stretch (scaleX, scaleY) */
   transform-origin: center;
 }
 
@@ -1172,3 +1174,38 @@ body table.model_table {
   transform-origin: center;
   text-align: center;
 }
+
+.site-header .floating-image{
+  position: absolute;     /* scrolls with the page, not the viewport */
+  top: -40px;
+  left: 750px;
+
+  width: 1000px;
+  height: auto;
+
+  opacity: .5;
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* A true “pin anywhere and stays put” image */
+/* Anchor absolute positioning to the whole page */
+body { position: relative; }
+
+.place-anywhere{
+  position: absolute;     /* IMPORTANT: not fixed */
+  top: 1100px;             /* choose any coordinates */
+  left: 300px;            /* choose any coordinates */
+
+  width: 1100px;           /* choose any size */
+  height: 900px;
+  transform: rotate(-350deg);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
+
+/* Optional: responsive safety so it can’t vanish off-screen */
+
+
