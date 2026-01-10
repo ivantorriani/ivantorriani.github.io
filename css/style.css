@@ -139,15 +139,15 @@ header h2 {
 
 .blueabout-body h1 {
   font-family: "Anton", system-ui, sans-serif;
-  font-size: 5rem;                    /* adjust to taste */
+  font-size: 4rem;                    /* adjust to taste */
   line-height: 1;                     /* tighter looks better for Bebas */
   margin: 0;
   font-weight:1200;
   z-index: 999;
-  color: #FF2800;
+  color: #4169E1;
 
   display: inline-block;              /* needed for transform */
-  transform: scale(2.4, 5.0);        /* stretch (scaleX, scaleY) */
+  transform: scale(2.2, 7.0);        /* stretch (scaleX, scaleY) */
   transform-origin: center;
 }
 
@@ -265,7 +265,7 @@ section.intro a {
   margin: 0 0.5em 0.5em 0;
   padding: 0.25em 0.5em;
   background-color: #5187fd;
-  color: #e9e9e9;
+  color: #4169E1;
   text-decoration: none;
   border-radius: 4px;
   font-size: 0.9em;
@@ -1192,19 +1192,57 @@ body table.model_table {
 /* Anchor absolute positioning to the whole page */
 body { position: relative; }
 
-.place-anywhere{
+.place-anywhere-a{
   position: absolute;     /* IMPORTANT: not fixed */
-  top: 1100px;             /* choose any coordinates */
-  left: 300px;            /* choose any coordinates */
+  top: 200px;             /* choose any coordinates */
+  left: -400px;            /* choose any coordinates */
 
   width: 1100px;           /* choose any size */
   height: 900px;
-  transform: rotate(-350deg);
+  transform: rotate(0deg);
   z-index: 0;
   pointer-events: none;
   opacity: 1;
 }
 
+.place-anywhere-b{
+  position: absolute;     /* IMPORTANT: not fixed */
+  top: 200px;             /* choose any coordinates */
+  left: 800px;            /* choose any coordinates */
+
+  width: 1100px;           /* choose any size */
+  height: 900px;
+  transform: rotate(0deg);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.place-anywhere-c{
+  position: absolute;     /* IMPORTANT: not fixed */
+  top: 1000px;             /* choose any coordinates */
+  left: -400px;            /* choose any coordinates */
+
+  width: 1100px;           /* choose any size */
+  height: 900px;
+  transform: rotate(0deg);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.place-anywhere-d{
+  position: absolute;     /* IMPORTANT: not fixed */
+  top: 1000px;             /* choose any coordinates */
+  left: 800px;            /* choose any coordinates */
+
+  width: 1100px;           /* choose any size */
+  height: 900px;
+  transform: rotate(0deg);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
 
 /* Optional: responsive safety so it can’t vanish off-screen */
 
