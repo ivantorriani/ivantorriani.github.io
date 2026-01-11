@@ -1123,9 +1123,19 @@ body table.model_table {
   height: auto;
   margin: 0;            /* kill the -20rem hack */
   flex: 0 0 auto;
-  margin-left: -20rem;
+  margin-left: -30rem;
 
 }
+
+.bio-atatoo{
+  width: 900px;         /* change this value as you like */
+  height: 700px;
+  margin: 0;            /* kill the -20rem hack */
+  flex: 0 0 auto;
+  margin-left: -15rem;
+
+}
+
 
 /* About box on the right */
 .bio-text{
