@@ -1247,3 +1247,61 @@ body { position: relative; }
 /* Optional: responsive safety so it can’t vanish off-screen */
 
 
+
+/*button styling */
+
+/* Load Bebas Neue */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+/* Neon button tokens */
+:root {
+  --neon-green: #4169E1;
+  --neon-green-border: #4169E1;
+  --neon-white: #ffffff;
+}
+
+/* Apply neon button styling to your existing "button" anchors */
+nav a,
+section.intro a,
+.post-links a {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+
+  color: var(--neon-white);
+  background-color: var(--neon-green);
+
+  border: 2px solid var(--neon-green-border);
+  border-radius: 9999px;
+
+  text-decoration: none;
+
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.35);
+  transition: transform 120ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+/* Hover */
+nav a:hover,
+section.intro a:hover,
+.post-links a:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05) saturate(1.15);
+  box-shadow: 0 0 18px #4169E1(57, 255, 20, 0.55), 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Keyboard focus (accessible) */
+nav a:focus-visible,
+section.intro a:focus-visible,
+.post-links a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.95),
+    0 0 0 7px #4169E1(57, 255, 20, 0.55),
+    0 0 20px #4169E1(57, 255, 20, 0.55);
+}
+
+/* Optional: pressed state */
+nav a:active,
+section.intro a:active,
+.post-links a:active {
+  transform: translateY(0px);
+}
