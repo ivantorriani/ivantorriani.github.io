@@ -1146,6 +1146,17 @@ body table.model_table {
   top: -230px;
 }
 
+.bio-vibe{
+  width: 900px;
+  height: auto;          /* prevents stretching/distortion */
+  flex: 0 0 auto;
+  margin: 0;             /* remove layout hacks */
+  position: relative;    /* enables left offset */
+  left: -700px;            /* moves it slightly to the right of the smore photo */
+  top: -230px;
+}
+
+
 
 /* About box on the right */
 .bio-text{
