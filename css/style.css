@@ -1146,6 +1146,16 @@ body table.model_table {
   left: -250px;            /* moves it slightly to the right of the smore photo */
 }
 
+.bio-powell{
+  width: 900px;
+  height: auto;          /* prevents stretching/distortion */
+  flex: 0 0 auto;
+  margin: 0;             /* remove layout hacks */
+  position: relative;    /* enables left offset */
+  left: -450px;            /* moves it slightly to the right of the smore photo */
+  top: -430px;
+}
+
 .bio-arch{
   width: 900px;
   height: auto;          /* prevents stretching/distortion */
