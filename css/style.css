@@ -1156,6 +1156,17 @@ body table.model_table {
   top: -430px;
 }
 
+.bio-vision{
+  width: 900px;
+  height: auto;          /* prevents stretching/distortion */
+  flex: 0 0 auto;
+  margin: 0;             /* remove layout hacks */
+  position: relative;    /* enables left offset */
+  left: -950px;            /* moves it slightly to the right of the smore photo */
+  top: 200px;
+}
+
+
 .bio-arch{
   width: 900px;
   height: auto;          /* prevents stretching/distortion */
@@ -1173,7 +1184,7 @@ body table.model_table {
   margin: 0;             /* remove layout hacks */
   position: relative;    /* enables left offset */
   left: -700px;            /* moves it slightly to the right of the smore photo */
-  top: -230px;
+  top: -50px;
 }
 
 
