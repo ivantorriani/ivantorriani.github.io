@@ -1138,12 +1138,12 @@ body table.model_table {
 }
 
 .bio-atatoo{
-  width: 900px;
+  width: 800px;
   height: auto;          /* prevents stretching/distortion */
   flex: 0 0 auto;
-  margin: 0;             /* remove layout hacks */
+  margin: 4;             /* remove layout hacks */
   position: relative;    /* enables left offset */
-  left: -250px;            /* moves it slightly to the right of the smore photo */
+  left: 50px;            /* moves it slightly to the right of the smore photo */
 }
 
 .bio-powell{
