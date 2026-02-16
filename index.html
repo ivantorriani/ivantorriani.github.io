@@ -47,9 +47,11 @@
 
 </header>
 
-<audio id="bg-music" loop preload="auto">
-  <source src="graphics/bgsong.mp3" type="audio/mpeg" />
+
+<audio id="sittingman-song" preload="auto">
+  <source src="graphics/sometheme.mp3" type="audio/mpeg" />
 </audio>
+
 
 
 
@@ -105,7 +107,8 @@
 
   <div class="bio-row">
     <img src="graphics/smore.png" alt="" class="bio-smore">
-    <img src="graphics/thesittingmanwaits.png" alt="" class="bio-atatoo">
+    <img src="graphics/thesittingmanwaits.png" alt="Play song" class="bio-atatoo" id="sittingman-btn" role="button" tabindex="0">
+
 
     <div class="bio-text">
      
@@ -157,30 +160,35 @@
     <p>&copy; 2025 Ivan </p>
   </footer>
 
-  <script>
-  const audio = document.getElementById("bg-music");
-  audio.volume = 0.2;
+<script>
+  const sittingBtn = document.getElementById("sittingman-btn");
+  const sittingSong = document.getElementById("sittingman-song");
 
-  async function startMusic() {
-    try {
-      await audio.play();
-      document.removeEventListener("click", startMusic);
-      document.removeEventListener("keydown", startMusic);
-      document.removeEventListener("touchstart", startMusic);
-    } catch (e) {
-      // If blocked, it will try again on the next interaction.
-      console.warn("Autoplay blocked:", e);
+  if (sittingBtn && sittingSong) {
+    function toggleSong() {
+      if (sittingSong.paused) {
+        // optional: stop the background music so they don't overlap
+        const bg = document.getElementById("bg-music");
+        if (bg && !bg.paused) bg.pause();
+
+        sittingSong.play().catch(() => {});
+      } else {
+        sittingSong.pause();
+      }
     }
+
+    sittingBtn.addEventListener("click", toggleSong);
+
+    // keyboard accessibility (Enter/Space)
+    sittingBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleSong();
+      }
+    });
   }
-
-  // Attempt immediately (may be blocked)
-  startMusic();
-
-  // Guaranteed attempt on first interaction
-  document.addEventListener("click", startMusic, { once: true });
-  document.addEventListener("keydown", startMusic, { once: true });
-  document.addEventListener("touchstart", startMusic, { once: true });
 </script>
+
 
 </body>
 </html>
