@@ -1129,21 +1129,23 @@ body table.model_table {
 
 /* Image MUST be smaller than the container so text can fit */
 .bio-smore{
-  width: 800px;         /* change this value as you like */
+  width: 1200px;         /* change this value as you like */
   height: auto;
-  margin: 0;            /* kill the -20rem hack */
+  margin: 0;   
+  position: relative;         /* kill the -20rem hack */
   flex: 0 0 auto;
-  margin-left: -30rem;
+  left: -300px;
 
 }
 
 .bio-atatoo{
-  width: 800px;
+  width: 400px;
   height: auto;          /* prevents stretching/distortion */
   flex: 0 0 auto;
   margin: 4;             /* remove layout hacks */
   position: relative;    /* enables left offset */
-  left: 50px;            /* moves it slightly to the right of the smore photo */
+  left: -500px; 
+  top: 460px          /* moves it slightly to the right of the smore photo */
 }
 
 .bio-powell{

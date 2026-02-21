@@ -52,6 +52,10 @@
   <source src="graphics/sometheme.mp3" type="audio/mpeg" />
 </audio>
 
+<audio id="amusician-song" preload="auto">
+  <source src="graphics/comegethis.mp3" type="audio/mpeg" />
+</audio>
+
 
 
 
@@ -106,7 +110,7 @@
 <div class="blueabout-body bio-box">
 
   <div class="bio-row">
-    <img src="graphics/smore.png" alt="" class="bio-smore">
+    <img src="graphics/amusicianstory.png" alt="" class="bio-smore" id="amusician-btn" role="button" tabindex="0">
     <img src="graphics/thesittingmanwaits.png" alt="Play song" class="bio-atatoo" id="sittingman-btn" role="button" tabindex="0">
 
 
@@ -184,6 +188,34 @@
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         toggleSong();
+      }
+    });
+  }
+</script>
+
+
+<script>
+  const musicBtn = document.getElementById("amusician-btn");
+  const musicSong = document.getElementById("amusician-song");
+
+  if (musicBtn && musicSong) {
+    function toggleMusic() {
+      if (musicSong.paused) {
+        const bg = document.getElementById("bg-music");
+        if (bg && !bg.paused) bg.pause();
+
+        musicSong.play().catch(() => {});
+      } else {
+        musicSong.pause();
+      }
+    }
+
+    musicBtn.addEventListener("click", toggleMusic);
+
+    musicBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleMusic();
       }
     });
   }
