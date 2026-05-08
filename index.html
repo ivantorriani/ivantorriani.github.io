@@ -9,23 +9,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-
 
 <header class="site-header">
   <video class="header-video" autoplay muted loop playsinline preload="metadata">
     <source src="graphics/better.mp4" type="video/mp4" />
   </video>
-
-  
 
   <div class="header-inner">
     <div class="header-top">
@@ -41,158 +32,47 @@
       <a href="keeptalking.html">KeepTalking</a>
       <a href="cvf.html">CVF Blog</a>
       <a href="nn.html">NewNews Blog</a>
+      <a href="summer-story.html">Studies for Summer Story</a>
+      <a href="summer-storyboard.html">Summer Storyboard</a>
     </nav>
   </div>
-
-
 </header>
-
-
-<audio id="sittingman-song" preload="auto">
-  <source src="graphics/sometheme.mp3" type="audio/mpeg" />
-</audio>
 
 <audio id="amusician-song" preload="auto">
   <source src="graphics/comegethis.mp3" type="audio/mpeg" />
 </audio>
 
-
-
-
-  <main>
-
-<section class="intro">
-  
-</section>
-
-
+<main>
 
 <section class="intro intro--video">
   <video class="section-video" autoplay muted loop playsinline preload="metadata">
     <source src="graphics/beauty.mp4" type="video/mp4" />
   </video>
+</section>
 
-  <!-- centered image -->
-  <img src="graphics/thesymbol.png" alt="Centered image" class="intro-center-image">
-
+<section class="intro">
   <article class="blueabout blueabout--refined" aria-label="About Ivan Torriani">
     <div class="blueabout-body">
-      <p>...</p>
+      <h1>I AM IVAN TORRIANI</h1>
     </div>
   </article>
 </section>
 
-<img src="graphics/moresymbols.png" alt="" class="place-anywhere-a">
-<img src="graphics/moresymbols.png" alt="" class="place-anywhere-b">
-<img src="graphics/moresymbols.png" alt="" class="place-anywhere-c">
-<img src="graphics/moresymbols.png" alt="" class="place-anywhere-d">
-
-
 <section class="intro">
-  <article class="blueabout blueabout--refined" aria-label="About Ivan Torriani">
-    </header>
-
-    <div class="blueabout-body">
-      <h1>
-        
-        I AM IVAN TORRIANI
-      </h1>
-
-    </div>
-
-    
-
-
-  </article>
-</section>
-
-<section class="intro">
-<div class="blueabout-body bio-box">
-
-  <div class="bio-row">
-    <img src="graphics/amusicianstory.png" alt="" class="bio-smore" id="amusician-btn" role="button" tabindex="0">
-    <img src="graphics/thesittingmanwaits.png" alt="Play song" class="bio-atatoo" id="sittingman-btn" role="button" tabindex="0">
-
-
-    <div class="bio-text">
-     
-      <p>
-        
-      </p>
+  <div class="blueabout-body bio-box">
+    <div class="bio-row">
+      <img src="graphics/amusicianstory.png" alt="" class="bio-smore" id="amusician-btn" role="button" tabindex="0">
+      <div class="bio-text">
+      </div>
     </div>
   </div>
-</div>
-
 </section>
 
-<section class="intro">
-<div class="blueabout-body bio-box">
+</main>
 
-  <div class="bio-row">
-    <img src="graphics/arch.png" alt="" class="bio-arch">
-    <img src="graphics/newvibe.png" alt="" class="bio-vibe">
-
-
-    <div class="bio-text">
-    </div>
-  </div>
-</div>
-
-</section>
-
-<section class="intro">
-<div class="blueabout-body bio-box">
-
-  <div class="bio-row">
-    <img src="graphics/powelll.png" alt="" class="bio-powell">
-
-    <img src="graphics/somenewvision.png" alt="" class="bio-vision">
-
-
-    <div class="bio-text">
-    </div>
-  </div>
-</div>
-
-</section>
-
-
-
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Ivan </p>
-  </footer>
-
-<script>
-  const sittingBtn = document.getElementById("sittingman-btn");
-  const sittingSong = document.getElementById("sittingman-song");
-
-  if (sittingBtn && sittingSong) {
-    function toggleSong() {
-      if (sittingSong.paused) {
-        // optional: stop the background music so they don't overlap
-        const bg = document.getElementById("bg-music");
-        if (bg && !bg.paused) bg.pause();
-
-        sittingSong.play().catch(() => {});
-      } else {
-        sittingSong.pause();
-      }
-    }
-
-    sittingBtn.addEventListener("click", toggleSong);
-
-    // keyboard accessibility (Enter/Space)
-    sittingBtn.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        toggleSong();
-      }
-    });
-  }
-</script>
-
+<footer>
+  <p>&copy; 2025 Ivan </p>
+</footer>
 
 <script>
   const musicBtn = document.getElementById("amusician-btn");
@@ -220,7 +100,6 @@
     });
   }
 </script>
-
 
 </body>
 </html>
