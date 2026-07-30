@@ -3,100 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Ivan Torriani Blog</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>KeepTalking — Ivan Torriani</title>
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="icon" href="/icon_2.png" type="image/x-icon" />
 </head>
 <body>
-  <header>
-    <h1>KeepTalking Blog </h1>
-    <nav>
-    <a href="index.html">About</a>
-    <a href="llm-blog.html">LLM Blog</a>
-    <a href="keeptalking.html">KeepTalking</a>
-    <a href = "cvf.html"> CVF Blog</a>
-    </nav>
 
+  <header class="page-header">
+    <h1>KeepTalking</h1>
+    <a class="back" href="index.html">← Home</a>
   </header>
 
   <main>
 
-      <section class="intro update">
-        <h1> Latest Updates! 📢❗🚨 (8/19/25)</h1>
-        <h2> ↣ New Blog
-             </h2>
-      </section>
-    <section class="intro">
-      <article class="blueabout blueabout--refined" aria-label="About Ivan Torriani">
-    </header>
-    <div class="blueabout-body">
-      <p>
-
-        <strong> Welcome! </strong>Here I share my thoughts, implementations, and explanations of my KeepTalking project. I just started, 
-        but the end goal is to have an open source advanced voice model to improve overall productivity. 
-      </p>
+    <div class="section">
+      <p class="update-note">Last updated 8/19/25 — new blog post</p>
+      <p class="intro-text">An open source advanced voice model aimed at improving overall productivity. I just started — the end goal is a seamless, conversational voice interface.</p>
     </div>
 
+    <div class="section">
+      <p class="section-label">Posts</p>
+      <ul class="post-list">
+        <li><a href="posts/kt_blogs/post1.html">Text to Speech with Whisper and PyAudio</a></li>
+      </ul>
+    </div>
 
-  </article>
-        <nav class="post-links playful">
-        <a href="posts/kt_blogs/post1.html">Text to Speech with Whisper and PyAudio</a>
-
-      </nav>
-      
-
-
-
-
-      </section>
-
-
-
-      <section class="intro">
-      <h2>Technologies and Repos</h2>
-      <p> Here you can find all the technology I used in the project, as well as the repo with the source code.</p>  
-      <!-- GitHub Sparkle Chip (place anywhere) -->
-        <a
-          class="gh-chip"
-          href="https://github.com/ivantorriani/KeepTalking"  
-          target="_blank"
-          rel="noopener"
-          aria-label="Open my GitHub repository on GitHub"
-        >
-          <svg class="gh-chip__icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82a7.5 7.5 0 012 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          <span class="gh-chip__label">View on GitHub</span>
-          <span class="gh-chip__sparkles" aria-hidden="true"></span>
-        </a>
-        <nav class="post-links playful">
-
-
-        <a
-        href="https://github.com/openai/whisper"
-        >
-        whisper (openAI)
-      </a>
-
-      <a
-        href="https://pypi.org/project/PyAudio/"
-        >
-        pyaudio
-      </a>
-    
-
-      <a
-        href="https://docs.python.org/3/library/io.html"
-        >
-        io library
-      </a>
-
-        
-
-        </section>
-
+    <div class="section">
+      <p class="section-label">Links</p>
+      <a class="gh-link" href="https://github.com/ivantorriani/KeepTalking" target="_blank" rel="noopener">GitHub Repo</a>
+      <ul class="link-list">
+        <li><a href="https://github.com/openai/whisper" target="_blank" rel="noopener">Whisper (OpenAI)</a></li>
+        <li><a href="https://pypi.org/project/PyAudio/" target="_blank" rel="noopener">PyAudio</a></li>
+        <li><a href="https://docs.python.org/3/library/io.html" target="_blank" rel="noopener">io library</a></li>
+      </ul>
+    </div>
 
   </main>
-
 
 </body>
 </html>

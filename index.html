@@ -3,103 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> I.C Torriani </title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Ivan Torriani</title>
   <link rel="icon" href="/icon_2.png" type="image/x-icon" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 4rem;
+      background: #fff;
+      font-family: 'Georgia', serif;
+      color: #111;
+    }
+
+    .card {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .card h1 {
+      font-size: 2.8rem;
+      font-weight: normal;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .card .phone {
+      font-size: 1rem;
+      color: #555;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .card a.resume-btn {
+      display: inline-block;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #111;
+      padding-bottom: 2px;
+      transition: opacity 0.2s ease;
+    }
+
+    .card a.resume-btn:hover {
+      opacity: 0.4;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 2rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav a {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: #111;
+    }
+
+    nav a.artwork-link {
+      color: #999;
+    }
+    nav a.artwork-link:hover {
+      color: #111;
+    }
+  </style>
 </head>
 <body>
 
-<header class="site-header">
-  <video class="header-video" autoplay muted loop playsinline preload="metadata">
-    <source src="graphics/better.mp4" type="video/mp4" />
-  </video>
-
-  <div class="header-inner">
-    <div class="header-top">
-      <div class="logo">
-        <img src="photos/icon_2.png" alt="Logo">
-      </div>
-      <h2>TORRIANI</h2>
-    </div>
-
-    <nav>
-      <a href="index.html">About</a>
-      <a href="llm-blog.html">LLM Blog</a>
-      <a href="keeptalking.html">KeepTalking</a>
-      <a href="cvf.html">CVF Blog</a>
-      <a href="nn.html">NewNews Blog</a>
-      <a href="summer-story.html">Studies for Summer Story</a>
-      <a href="summer-storyboard.html">Summer Storyboard</a>
-    </nav>
+  <div class="card">
+    <img src="graphics/amusicianstory.png" alt="A Musician's Story" style="max-width: 700px; width: 90vw; margin-bottom: 2.5rem; display: block; margin-left: auto; margin-right: auto; border: 1px solid #111;">
+    <h1>Ivan Torriani</h1>
+    <p class="phone">(760) 642-8634</p>
+    <a class="resume-btn" href="photos/link/ivan_torriani_rsme.pdf" download>Download Résumé</a>
   </div>
-</header>
 
-<audio id="amusician-song" preload="auto">
-  <source src="graphics/comegethis.mp3" type="audio/mpeg" />
-</audio>
-
-<main>
-
-<section class="intro intro--video">
-  <video class="section-video" autoplay muted loop playsinline preload="metadata">
-    <source src="graphics/beauty.mp4" type="video/mp4" />
-  </video>
-</section>
-
-<section class="intro">
-  <article class="blueabout blueabout--refined" aria-label="About Ivan Torriani">
-    <div class="blueabout-body">
-      <h1>I AM IVAN TORRIANI</h1>
-    </div>
-  </article>
-</section>
-
-<section class="intro">
-  <div class="blueabout-body bio-box">
-    <div class="bio-row">
-      <img src="graphics/amusicianstory.png" alt="" class="bio-smore" id="amusician-btn" role="button" tabindex="0">
-      <div class="bio-text">
-      </div>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <p>&copy; 2025 Ivan </p>
-</footer>
-
-<script>
-  const musicBtn = document.getElementById("amusician-btn");
-  const musicSong = document.getElementById("amusician-song");
-
-  if (musicBtn && musicSong) {
-    function toggleMusic() {
-      if (musicSong.paused) {
-        const bg = document.getElementById("bg-music");
-        if (bg && !bg.paused) bg.pause();
-
-        musicSong.play().catch(() => {});
-      } else {
-        musicSong.pause();
-      }
-    }
-
-    musicBtn.addEventListener("click", toggleMusic);
-
-    musicBtn.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        toggleMusic();
-      }
-    });
-  }
-</script>
+  <nav>
+    <a href="llm-blog.html">LLM Blog</a>
+    <a href="keeptalking.html">KeepTalking</a>
+    <a href="cvf.html">CVF Blog</a>
+    <a href="nn.html">NewNews</a>
+    <a href="artwork.html" class="artwork-link">Artwork</a>
+  </nav>
 
 </body>
 </html>

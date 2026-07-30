@@ -3,222 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Ivan Torriani Blog</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>LLM Blog — Ivan Torriani</title>
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="icon" href="/icon_2.png" type="image/x-icon" />
 </head>
 <body>
-  <header>
-    <h1>LLM Blog</h1>
-    <nav>
-    <a href="index.html">About</a>
-    <a href="llm-blog.html">LLM Blog</a>
-    <a href="keeptalking.html">KeepTalking</a>
-    <a href = "cvf.html"> CVF Blog</a>
-    </nav>
 
+  <header class="page-header">
+    <h1>LLM Blog</h1>
+    <a class="back" href="index.html">← Home</a>
   </header>
 
   <main>
 
-      <section class="intro update">
-        <h1> Latest Updates! 📢❗🚨 (8/19/25)</h1>
-        <h2> ↣ xperyv4 is posted
-             </h2>
-      </section>
-    <section class="intro">
-      <article class="blueabout blueabout--refined" aria-label="About Ivan Torriani">
-    </header>
-    <div class="blueabout-body">
-      <p>
-
-        <strong> Welcome! </strong>Here I share my thoughts, implementations, and explanations of my LLM project. Earlier on,
-        you'll find my conceptual/mathematical explanations of the entire architecture of a LLM, including attention mechanisms,
-        transformer blocks, and more. Later on, you'll find more evaluation and reflections based on continous training and revising 
-        of my models. 
-      </p>
+    <div class="section">
+      <p class="update-note">Last updated 8/19/25 — xperyv4 posted</p>
+      <p class="intro-text">Here I share my thoughts, implementations, and explanations of my LLM project. Earlier on you'll find conceptual and mathematical explanations of the entire architecture — attention mechanisms, transformer blocks, and more. Later on, evaluations and reflections from continuous training and revising of my models.</p>
     </div>
 
+    <div class="section">
+      <p class="section-label">Posts</p>
+      <ul class="post-list">
+        <li><a href="posts/post5.html">Mathematics of Attention Mechanisms</a></li>
+        <li><a href="posts/post6.html">Implementation of Weights, Self Attention</a></li>
+        <li><a href="posts/post7.html">Dropouts, Masking, Casual Attention</a></li>
+        <li><a href="posts/post8.html">Re-implementing Attention Mechanisms</a></li>
+        <li><a href="posts/post9.html">Early Explorations of GPT Architecture</a></li>
+        <li><a href="posts/post10.html">nn.Linear Steps and Normalization</a></li>
+        <li><a href="posts/post11.html">Deeper Normalization, GELU, Feed Forward</a></li>
+        <li><a href="posts/post12.html">Shortcut Connections, Transformers, and Analytics</a></li>
+        <li><a href="posts/post13.html">"It's alive! It's alive!"</a></li>
+        <li><a href="posts/post14.html">Model Outputs, Cross Entropy, other Evaluations</a></li>
+        <li><a href="posts/post15.html">Chores and Training</a></li>
+        <li><a href="posts/post16.html">Integration, Experimentation, Temperature, Top K</a></li>
+        <li><a href="posts/post17.html">Training with Gutenberg</a></li>
+        <li><a href="posts/post18.html">Gutenberg Begins Training, 36 Hours to Go</a></li>
+        <li><a href="posts/post19.html">Exuperyv2 Out, Early Looks</a></li>
+        <li><a href="posts/post20.html">Exploring Existing Weights, Reconsidering Paths</a></li>
+        <li><a href="posts/post21.html">Reflections on v3 and v4</a></li>
+      </ul>
+    </div>
 
-  </article>
-      <nav class="post-links playful">
-        <a href="posts/post5.html">Mathematics of Attention Mechs</a>
-        <a href="posts/post6.html">Implementation of Weights, Self Attention</a>
-        <a href="posts/post7.html">Dropouts, Masking, Casual Attention</a>
-        <a href="posts/post8.html">Re-implmenting Attention Mechanisms</a>
-        <a href="posts/post9.html">Early Explorations of GPT Architecture</a>
-        <a href="posts/post10.html">nn.Linear Steps and Normalization</a>
-        <a href="posts/post11.html">Deeper Normalization, GELU, Feed Forward</a>
-        <a href="posts/post12.html">Shortcut Connections, Transformers, and Analytics</a>
-        <a href="posts/post13.html">"It's alive! It's alive!"</a>
-        <a href="posts/post14.html">Model Outputs, Cross Entropy, other Evaluations</a>
-        <a href="posts/post15.html">Chores and Training</a>
-        <a href="posts/post16.html">Integration, Experimentation, Temperature, Top K</a>
-        <a href="posts/post17.html">Training with Gutenberg</a>
-        <a href="posts/post18.html">Gutenberg Begins Training, 36 Hours to Go</a>
-        <a href="posts/post19.html">Exuperyv2 Out, Early Looks</a>
-        <a href="posts/post20.html">Exploring Existing Weights, Reconsidering Paths</a>
-        <a href="posts/post21.html">Reflections on v3 and v4</a>
-      </nav>
-      
+    <div class="section">
+      <p class="section-label">Model Checkpoints</p>
+      <a class="hf-link" href="https://huggingface.co/1torriani" target="_blank" rel="noopener">Hugging Face Repo</a>
+      <table class="model-table">
+        <thead>
+          <tr><th>Version</th><th>Size</th><th>Download</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>xuperyv1</td><td>652mb</td><td><a href="https://drive.google.com/file/d/1515-x5s0wefRxuQ6iUCE8WWcB7w3ymRB/view?usp=drive_link" target="_blank" rel="noopener">link</a></td></tr>
+          <tr><td>xuperyv2</td><td>699mb</td><td><a href="https://drive.google.com/file/d/1ufFOC98xBPVYNbiwR0O2zxx--mTLAWXM/view?usp=drive_link" target="_blank" rel="noopener">link</a></td></tr>
+          <tr><td>xuperyv2-primed</td><td>670mb</td><td><a href="https://drive.google.com/file/d/1lopkHSInZumZR-gLWdTJrQkLVYN6Bnod/view?usp=drive_link" target="_blank" rel="noopener">link</a></td></tr>
+          <tr><td>xuperyv3</td><td>630mb</td><td><a href="https://drive.google.com/file/d/1h6I36rqnG4zYS64_y058uNwNEYuaH2R-/view?usp=drive_link" target="_blank" rel="noopener">link</a></td></tr>
+          <tr><td>xuperyv4</td><td>458mb</td><td><a href="https://drive.google.com/file/d/174sc2a_4Mp4G0jc1d9HO4vXAO5AWrXG5/view?usp=sharing" target="_blank" rel="noopener">link</a></td></tr>
+        </tbody>
+      </table>
+    </div>
 
-
-
-      </section>
-
-
-
-      <section class="intro">
-      <h2>Important Links</h2>
-      <p> GitHub Repos, Articles/Videos I found useful,</p>  
-      <!-- GitHub Sparkle Chip (place anywhere) -->
-        <a
-          class="gh-chip"
-          href="https://github.com/ivantorriani/llm"  
-          target="_blank"
-          rel="noopener"
-          aria-label="Open my GitHub repository on GitHub"
-        >
-          <svg class="gh-chip__icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82a7.5 7.5 0 012 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          <span class="gh-chip__label">View on GitHub</span>
-          <span class="gh-chip__sparkles" aria-hidden="true"></span>
-        </a>
-
-
-      <nav class="post-links playful">
-
-
-        <a
-        href="https://sebastianraschka.com/teaching/pytorch-1h/""
-        >
-        PyTorch Primer
-      </a>
-
-      <a
-        href="https://arxiv.org/pdf/1706.03762"
-        >
-        Attention is All You Need (attention mech paper)
-      </a>
-
-      <a
-        href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf"
-        >
-        Unsupervised Multitask Learners Paper
-      </a>
-
-          <a
-        href="https://arxiv.org/pdf/1412.6980"
-        >
-        Adam (AdamW) Paper (Optimizer)
-      </a>
-      <a
-      href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf"
-      >
-      Pre-Training Paper
-    
-      </a>
-
-        <a
-      href="https://arxiv.org/pdf/1911.12391"
-      >
-      SimpleBooks Paper/Dataset 
-    
-      </a>
-      </nav>
-
-    
-      </section>
-
-
-
-<section class="intro">
-  <h2>Model Checkpoints</h2>
-  <p>Here are the <code>.pth</code> models that I've made. They are all available on my hugging face</p>
-  
-  <a class="hugging_face_repo" href="https://huggingface.co/1torriani"> Hugging Face Repo</a>
-  <table class="model_table">
-    <thead>
-      <tr>
-        <th>Version</th>
-        <th>Size</th>
-        <th>Download</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>xuperyv1</td>
-        <td>652mb</td>
-        <td>
-          <a
-            href="https://drive.google.com/file/d/1515-x5s0wefRxuQ6iUCE8WWcB7w3ymRB/view?usp=drive_link"
-            target="_blank"
-            rel="noopener"
-          >
-            link
-          </a>
-        </td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td>xuperyv2</td>
-        <td>699mb</td>
-        <td>
-          <a
-            href="https://drive.google.com/file/d/1ufFOC98xBPVYNbiwR0O2zxx--mTLAWXM/view?usp=drive_link"
-            target="_blank"
-            rel="noopener"
-          >
-            link
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td>xuperyv2-primed</td>
-        <td>670mb</td>
-        <td>
-          <a
-            href="https://drive.google.com/file/d/1lopkHSInZumZR-gLWdTJrQkLVYN6Bnod/view?usp=drive_link"
-            target="_blank"
-            rel="noopener"
-          >
-            link
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td>xuperyv3</td>
-        <td>630mb</td>
-        <td>
-          <a
-            href="https://drive.google.com/file/d/1h6I36rqnG4zYS64_y058uNwNEYuaH2R-/view?usp=drive_link"
-            target="_blank"
-            rel="noopener"
-          >
-            link
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td>xuperyv4</td>
-        <td>458mb</td>
-        <td>
-          <a
-            href="https://drive.google.com/file/d/174sc2a_4Mp4G0jc1d9HO4vXAO5AWrXG5/view?usp=sharing"
-            target="_blank"
-            rel="noopener"
-          >
-            link
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <div class="section">
+      <p class="section-label">Links</p>
+      <a class="gh-link" href="https://github.com/ivantorriani/llm" target="_blank" rel="noopener">GitHub Repo</a>
+      <ul class="link-list">
+        <li><a href="https://sebastianraschka.com/teaching/pytorch-1h/" target="_blank" rel="noopener">PyTorch Primer</a></li>
+        <li><a href="https://arxiv.org/pdf/1706.03762" target="_blank" rel="noopener">Attention is All You Need</a></li>
+        <li><a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank" rel="noopener">Unsupervised Multitask Learners Paper</a></li>
+        <li><a href="https://arxiv.org/pdf/1412.6980" target="_blank" rel="noopener">Adam (AdamW) Paper</a></li>
+        <li><a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf" target="_blank" rel="noopener">Pre-Training Paper</a></li>
+        <li><a href="https://arxiv.org/pdf/1911.12391" target="_blank" rel="noopener">SimpleBooks Paper/Dataset</a></li>
+      </ul>
+    </div>
 
   </main>
-
 
 </body>
 </html>

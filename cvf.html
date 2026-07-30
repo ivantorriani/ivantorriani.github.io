@@ -3,86 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Ivan Torriani Blog</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>CVF Blog — Ivan Torriani</title>
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="icon" href="/icon_2.png" type="image/x-icon" />
 </head>
 <body>
-  <header>
-    <h1>CVF Blog</h1>
-    <nav>
-    <a href="index.html">About</a>
-    <a href="llm-blog.html">LLM Blog</a>
-    <a href="keeptalking.html">KeepTalking</a>
-    <a href = "cvf.html"> CVF Blog</a>
-    </nav>
 
+  <header class="page-header">
+    <h1>CVF Blog</h1>
+    <a class="back" href="index.html">← Home</a>
   </header>
 
   <main>
 
-      <section class="intro update">
-        <h1> Latest Updates! 📢❗🚨 (8/15/25)</h1>
-        <h2> ↣ started new blog  </h2>
-      </section>
-    <section class="intro">
-      <h2>Welcome!</h2>
-      <p> I just started on a project using Computer Vision to assist vineyard fertilization 
-        practices for a professor. 
-        </p>
+    <div class="section">
+      <p class="update-note">Last updated 8/15/25 — new blog started</p>
+      <p class="intro-text">Using Computer Vision to assist vineyard fertilization practices for a professor.</p>
+    </div>
 
-      <nav class="post-links playful">
-        <a href = "posts/cvf_blogs/post1.html"> Labeling Image Datasets, Future of Labeling, Evaluating</a>
-        <a href="posts/cvf_blogs/post2.html"> Labeling Guidelines and GCP </a>
-        <a href = "posts/cvf_blogs/post3.html"> Roboflow and Ultralytics Hub </a>
-        <a href = "posts/cvf_blogs/post4.html"> Setup Training Environment
-      </nav>
-      
+    <div class="section">
+      <p class="section-label">Posts</p>
+      <ul class="post-list">
+        <li><a href="posts/cvf_blogs/post1.html">Labeling Image Datasets, Future of Labeling, Evaluating</a></li>
+        <li><a href="posts/cvf_blogs/post2.html">Labeling Guidelines and GCP</a></li>
+        <li><a href="posts/cvf_blogs/post3.html">Roboflow and Ultralytics Hub</a></li>
+        <li><a href="posts/cvf_blogs/post4.html">Setup Training Environment</a></li>
+      </ul>
+    </div>
 
-
-
-      </section>
-
-
-
-      <section class="intro">
-      <h2>Important Links</h2>
-      <p> GitHub Repos, Articles/Videos I found useful,
-        
-    </p>
-
-            <nav class="post-links playful">
-
-
-        <a
-        href="https://roboflow.com/"
-        >
-        roboflow
-      </a>
-
-      <a
-        href="https://hub.ultralytics.com/home"
-        >
-        ultralytics hub
-      </a>
-    
-
-      <a
-        href="https://docs.python.org/3/library/io.html"
-        >
-        io library
-      </a>
-      <a
-        href="https://anylabeling.nrl.ai/"
-        >
-        any labeling
-      </a>
-            </nav>
-    
-      </section>
-
+    <div class="section">
+      <p class="section-label">Links</p>
+      <ul class="link-list">
+        <li><a href="https://roboflow.com/" target="_blank" rel="noopener">Roboflow</a></li>
+        <li><a href="https://hub.ultralytics.com/home" target="_blank" rel="noopener">Ultralytics Hub</a></li>
+        <li><a href="https://docs.python.org/3/library/io.html" target="_blank" rel="noopener">io library</a></li>
+        <li><a href="https://anylabeling.nrl.ai/" target="_blank" rel="noopener">AnyLabeling</a></li>
+      </ul>
+    </div>
 
   </main>
-
 
 </body>
 </html>
