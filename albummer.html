@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>albummer — Ivan Torriani</title>
+  <meta name="description" content="Letterboxd for music — a full-stack album logging app with three recommendation systems, built in ten days." />
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="icon" href="/icon_2.png" type="image/x-icon" />
+</head>
+<body>
+
+  <header class="project-header">
+    <a class="back" href="index.html">← Ivan Torriani</a>
+    <h1>albummer</h1>
+    <p class="subtitle">Letterboxd for music — log, rate, and review albums. A full-stack web and mobile app with three distinct recommendation systems, built in ten days.</p>
+  </header>
+
+  <main>
+
+    <div class="project-meta">
+      <div>
+        <dt>Role</dt>
+        <dd>Solo — design and build</dd>
+      </div>
+      <div>
+        <dt>Period</dt>
+        <dd>Aug 2026</dd>
+      </div>
+      <div>
+        <dt>Surface</dt>
+        <dd>Web + iOS/Android</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>Working prototype</dd>
+      </div>
+    </div>
+
+    <article>
+
+      <p class="lede">Film has Letterboxd. Music has nothing equivalent — no shared place to keep a listening diary, rate records on a half-star scale, and see what the people you follow are actually playing. albummer is that, with the album as the unit rather than the track or the film.</p>
+
+      <p>The social layer is the reason to open it. The interesting engineering is underneath: recommending albums to a brand-new service with almost no interaction data, which is the cold-start problem in its least forgiving form. Collaborative filtering needs users you don't have yet. Spotify's audio-features API — the obvious content-based fallback — was deprecated in November 2024 and extended access is now gated behind 250,000 monthly active users.</p>
+
+      <p>So the recommender had to be built from what was actually available. It ended up being three separate systems, each solving a different version of the question.</p>
+
+      <h3>1. Cultural-seed daily pairing</h3>
+
+      <p>One pairing per day, seeded from a cultural movement, an artwork, or a historical event — <em>never</em> from another album. The seed spreads activation across a graph of movements to expand into a keyword set, then albums are scored by IDF-weighted keyword overlap plus shared movement lineage.</p>
+
+      <p>The lineage term is the whole point. Keyword overlap alone can only tell you that two things are "both defiant and from the 1970s." It cannot express <strong>Situationism → Punk → Post-Punk</strong> — which is the connection actually worth showing someone, because it explains <em>why</em> rather than noting a coincidence of tags.</p>
+
+      <p>Spreading activation is normalized by out-degree, dividing what leaves a node by the square root of its number of children. Without that, a hub concept like <code>modernism</code>, with thirteen children, floods generic activation into every corner of the graph and every seed starts producing the same bland pairing.</p>
+
+      <p>Scheduling is a shuffled permutation rather than random sampling: the seed pool is shuffled once per epoch with a date-derived seed and then walked in order, so every seed appears exactly once before any repeats. That gives a guaranteed worst-case gap — measured at 16 days over a 600-day simulation against a 198-seed pool — which rejection-sampling against history simply cannot promise.</p>
+
+      <h3>2. Audio-similarity embeddings</h3>
+
+      <p>Each album's best-known track gets a 30-second preview pulled from Deezer, run through Essentia's Discogs-EffNet model, and mean-pooled into a 1280-dimensional vector stored as a SQLite blob. Similarity is cosine distance computed at request time.</p>
+
+      <p>This replaced an earlier text-based BM25 similarity signal, which was removed after it was caught doing something quietly useless: matching albums on <em>shared music-journalism vocabulary</em> rather than shared sound. Records were being recommended to each other because both write-ups contained phrases like "sixth studio album" and "Grammy Awards." The signal looked plausible in aggregate and was measuring the prose, not the music.</p>
+
+      <p>Ranking isn't pure similarity either. A bounded multiplicative popularity boost is applied, on the reasoning that a technically closer but obscure pick is often a worse recommendation than a slightly less close but genuinely well-loved record — most listeners want the latter.</p>
+
+      <h3>3. Two-tier hybrid</h3>
+
+      <figure>
+        <svg class="diagram" viewBox="0 0 700 216" role="img" aria-label="Two-tier recommendation: tier one retrieves candidates from the Deezer related-artist graph and audio embedding similarity, merged and deduplicated into a verified shortlist; tier two sends that shortlist to Claude for re-ranking and explanation.">
+          <defs>
+            <marker id="a-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+            </marker>
+          </defs>
+
+          <text class="lbl-sm" x="120" y="18" text-anchor="middle">Tier 1 — retrieval</text>
+          <text class="lbl-sm" x="530" y="18" text-anchor="middle">Tier 2 — re-rank + explain</text>
+          <line class="axis" x1="332" y1="8" x2="332" y2="196" stroke-dasharray="3 4"/>
+
+          <rect class="box" x="14" y="36" width="150" height="50" rx="2"/>
+          <text class="lbl" x="89" y="57" text-anchor="middle">Deezer related</text>
+          <text class="lbl" x="89" y="73" text-anchor="middle" fill="#888">artist graph</text>
+
+          <rect class="box" x="14" y="116" width="150" height="50" rx="2"/>
+          <text class="lbl" x="89" y="137" text-anchor="middle">Audio embeddings</text>
+          <text class="lbl" x="89" y="153" text-anchor="middle" fill="#888">1280-d cosine</text>
+
+          <path class="flow" d="M 164 61 L 196 61 L 196 101 L 222 101" marker-end="url(#a-ah)"/>
+          <path class="flow" d="M 164 141 L 196 141 L 196 101"/>
+
+          <rect class="box" x="224" y="76" width="96" height="50" rx="2"/>
+          <text class="lbl" x="272" y="97"  text-anchor="middle">Merge +</text>
+          <text class="lbl" x="272" y="113" text-anchor="middle">dedupe</text>
+
+          <line class="flow" x1="320" y1="101" x2="368" y2="101" marker-end="url(#a-ah)"/>
+
+          <rect class="box-soft" x="370" y="76" width="130" height="50" rx="2"/>
+          <text class="lbl" x="435" y="97"  text-anchor="middle">Verified shortlist</text>
+          <text class="lbl" x="435" y="113" text-anchor="middle" fill="#888">real albums only</text>
+
+          <line class="flow" x1="500" y1="101" x2="532" y2="101" marker-end="url(#a-ah)"/>
+
+          <rect class="box" x="534" y="76" width="152" height="50" rx="2"/>
+          <text class="lbl" x="610" y="97"  text-anchor="middle">Claude re-rank</text>
+          <text class="lbl" x="610" y="113" text-anchor="middle" fill="#888">+ written reason</text>
+
+          <text class="lbl-sm" x="435" y="152" text-anchor="middle">the model can only pick from this set</text>
+          <text class="lbl-sm" x="435" y="167" text-anchor="middle">— so inventing an album is impossible</text>
+        </svg>
+        <figcaption>"Because you listened to X." Retrieval is deterministic; the language model only re-orders and explains.</figcaption>
+      </figure>
+
+      <p>The structural property here matters more than the model choice. Because Claude only ever picks from a pre-verified list of albums that are known to exist, <strong>hallucinating a nonexistent release is impossible by construction</strong> rather than by prompt instruction. The LLM is doing the thing it is good at — ranking and explaining — and is architecturally prevented from doing the thing it is bad at.</p>
+
+      <p>This mirrors the published design of large-scale systems closely. The research notes behind the project work through Spotify's BaRT contextual bandit and their December 2024 work on LLM-generated recommendation narratives, where users were reported up to four times more likely to click a recommendation carrying a written explanation. The conclusion the notes reach: the chatbot layer is an explanation and UX surface draped over a conventional hybrid core — which means <em>the pattern, not the scale, is copyable</em>.</p>
+
+      <h3>Decisions worth defending</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">Empty deps</span><span class="v">The recommendation backend has an intentionally empty <code>requirements.txt</code>. At ~370 entities, importing NumPy costs more wall-clock time than the entire scoring pass — and scikit-learn's <code>TfidfTransformer</code> implements smoothed textbook IDF, which cannot express the BM25 IDF with pivoted length normalization and activation-weighted query terms this actually needs.</span></li>
+        <li><span class="k">Versioned algo</span><span class="v"><code>ALGO_VERSION</code> is a hash of the tuning constants, so changing any constant necessarily changes the version stamped on every row it produces. Retuning and silently leaving old rows claiming to be new is impossible.</span></li>
+        <li><span class="k">Cron, not request</span><span class="v">Pairings are computed forward by cron; the web app only ever runs <code>SELECT</code>. This keeps Next.js out of the business of invoking Python on a read and removes the insert race between two people opening the page at midnight. The past is append-only and immutable; the future is disposable.</span></li>
+        <li><span class="k">Alignment bug</span><span class="v">better-sqlite3's Buffer is not guaranteed 4-byte-aligned inside its underlying ArrayBuffer, so viewing it in place as a <code>Float32Array</code> can silently read garbage. Every embedding read copies into a fresh zero-offset buffer first.</span></li>
+      </ul>
+
+      <h3>Built</h3>
+
+      <p>Mark-as-listened on every card, a dated listening log with backdating and relisten flags, half-star ratings with a weighted average and histogram, reviews with a lyric-spoiler flag, want-to-listen with auto-removal, album pages, custom lists (ranked or unranked, public, shared or private), follows, an activity feed, a member directory, profiles with a favorites shelf, and where-to-listen links.</p>
+
+      <div class="figure-row">
+        <div class="stat">
+          <div class="value">33</div>
+          <div class="label">SQLite tables</div>
+        </div>
+        <div class="stat">
+          <div class="value">17 / 20</div>
+          <div class="label">Web pages / API routes</div>
+        </div>
+        <div class="stat">
+          <div class="value">14</div>
+          <div class="label">Mobile screens</div>
+        </div>
+        <div class="stat">
+          <div class="value">10 days</div>
+          <div class="label">Build time</div>
+        </div>
+      </div>
+
+      <h3>System</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">Web</span><span class="v">Next.js 16, React 19, TypeScript, Tailwind CSS 4, better-sqlite3, better-auth, WebGL via ogl</span></li>
+        <li><span class="k">Mobile</span><span class="v">Expo SDK 57, React Native, expo-router, Reanimated, expo-gl, zustand</span></li>
+        <li><span class="k">Backend</span><span class="v">Python 3, standard library only — deliberately</span></li>
+        <li><span class="k">ML</span><span class="v">Essentia + Discogs-EffNet for 1280-d audio embeddings; Claude for re-ranking and explanation</span></li>
+        <li><span class="k">Data</span><span class="v">SQLite in WAL mode; Deezer and Last.fm as external sources</span></li>
+      </ul>
+
+      <h3>Not built</h3>
+
+      <div class="limitations">
+        <ul>
+          <li>Curated charts — these need rating volume before they mean anything, and the volume isn't there yet.</li>
+          <li>Membership tiers and billing, the advanced search grammar, tags, Year in Review, artist pages, notifications, data export.</li>
+          <li>Comments and likes have a schema and are read from, but nothing writes to them yet.</li>
+          <li>Two deliberate deviations from Letterboxd, both forced by the original being closed: the rating average uses a plain Bayesian prior rather than their unpublished weighting, and albums are cached from a Deezer search proxy rather than held in a canonical catalogue.</li>
+        </ul>
+      </div>
+
+    </article>
+
+  </main>
+
+</body>
+</html>

@@ -1,25 +1,23 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM Blog</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <title>Early Explorations of GPT Architecture — Ivan Torriani</title>
+  <link rel="stylesheet" href="../css/minimal.css" />
+  <link rel="icon" href="../icon_2.png" type="image/x-icon" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </head>
 <body>
-  <header>
-    <h1>My Blog</h1>
-    <nav>
-      <a href="../index.html">Home</a>
-    </nav>
+  <header class="page-header">
+    <h1>Early Explorations of GPT Architecture</h1>
+    <a class="back" href="../llm-blog.html">← LLM Blog</a>
   </header>
 
   <main>
     <article>
-      <h2>Early Explorations of GPT Architecture</h2>
-      <p><em>July 30, 2025</em></p>
+      <p class="post-meta">July 30, 2025</p>
 
       <p>
        Today I started with implementing text chapter 4. Immediately, it threw at me the complete architecture of a simple gpt model. I know that it keeps going pretty quickly and starts using the model to create simple logits, but I wanted to go through it and just break apart the class functionalities first. 
@@ -37,13 +35,8 @@
         in the forward pass function where it takes \(X\) as an argument. Mathematically: 
       </p>
 
-      <div style="text-align: center;">
-      <img
-        src="../photos/6-30/math01.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 400px;      /* shrink this to taste */
-              height: auto;"
+      <div>
+      <img src="../photos/6-30/math01.png" alt="Figure 1 — Early Explorations of GPT Architecture"
       />
     </div>
 
@@ -60,13 +53,8 @@
       shape, we just add them: 
     </p>
 
-    <div style="text-align: center;">
-      <img
-        src="../photos/6-30/math02.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 500px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/6-30/math02.png" alt="Figure 2 — Early Explorations of GPT Architecture"
       />
     </div>
 
@@ -77,13 +65,8 @@
       in the transformer module, though. Mathematically just to get a better look
     </p>
 
-    <div style="text-align: center;">
-      <img
-        src="../photos/6-30/math03.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 600px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/6-30/math03.png" alt="Figure 3 — Early Explorations of GPT Architecture"
       />
     </div>
 
@@ -92,13 +75,8 @@
       tokens in unnormalized format. This is what it looks like to calculate: 
     </p>
 
-      <div style="text-align: center;">
-      <img
-        src="../photos/6-30/math04.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 500px;      /* shrink this to taste */
-              height: auto;"
+      <div>
+      <img src="../photos/6-30/math04.png" alt="Figure 4 — Early Explorations of GPT Architecture"
       />
     </div>
 
@@ -116,14 +94,18 @@
     <section class="post-gallery">
       <h3>Photos for This Post</h3>
       <div class="post-gallery-grid">
-        <img src="../photos/6-28/multi-head.png" alt="Description 1">
-        <img src="../photos/6-28/other-head.png">
+        <img src="../photos/6-28/multi-head.png" alt="Multi head — Early Explorations of GPT Architecture">
+        <img src="../photos/6-28/other-heads.png">
       </div>
     
 
 
       </div>
     </section>
+    <nav class="post-nav">
+      <a href="post8.html">← Practicing Self Attention Mechanisms</a>
+      <a href="post10.html">Normalization and nn.Linear →</a>
+    </nav>
   </main>
 
 

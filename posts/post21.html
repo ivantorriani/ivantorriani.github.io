@@ -1,57 +1,34 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM Blog</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <title>Reflections on Training v3 &amp; v4 — Ivan Torriani</title>
+  <link rel="stylesheet" href="../css/minimal.css" />
+  <link rel="icon" href="../icon_2.png" type="image/x-icon" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </head>
 <body>
-  <header>
-    <h1>My Blog</h1>
-    <nav>
-      <a href="../index.html">Home</a>
-    </nav>
+  <header class="page-header">
+    <h1>Reflections on Training v3 &amp; v4</h1>
+    <a class="back" href="../llm-blog.html">← LLM Blog</a>
   </header>
 
   <main>
     <article>
-      <h2>Reflections on Training v3 & v4</h2>
-      <p><em>August 18, 2025</em></p>
+      <p class="post-meta">August 18, 2025</p>
 
-
-<div style="border: 2px solid #EBE8D5; border-radius: 10px; padding: 7px;">
-  <h3 style="margin: 0;">
-    <a href="https://www.goodreads.com/user/show/184789811-ivan-torriani" 
-       style="text-decoration: none; color: #aaa; font-family: georgia, serif; font-style: italic;" 
-       rel="nofollow">
-       Xpery speaks...
-    </a>
-  </h3>
-
-  <div id="gr_quote_body" style="margin-top: 10px; font-family: georgia, serif; font-style: italic; color: #333;">
-    “The lake this morning is like a green star. These leaves are covered with soft hairs,<br><br>
-    and have a delicate row of bright yellow stalks, which are quite green and hollow. <br><br>
-   These flowers grow in pairs, and each green buds are a double row of wo-shaped calyx. <br><br>
-    — <a title="xpery quotes" 
-         href="https://www.goodreads.com/author/quotes/58389593.xpery" 
-         style="color: #382110; text-decoration: none;">
-         xpery
-      </a>
-  </div>
-
-  <div style="text-align: right; margin-top: 10px;">
-    <a href="https://www.goodreads.com/quotes" 
-       style="color: #382110; text-decoration: none; font-size: 10px;" 
-       rel="nofollow">
-    
-    </a>
-  </div>
-</div>
-
-
+<blockquote>
+        <p>
+          &ldquo;The lake this morning is like a green star. These leaves are covered with soft hairs,
+          and have a delicate row of bright yellow stalks, which are quite green and hollow.
+          These flowers grow in pairs, and each green buds are a double row of wo-shaped calyx.&rdquo;
+        </p>
+        <p class="post-meta quote-attrib">Xpery, the model, generating &mdash;
+          <a href="https://www.goodreads.com/author/quotes/58389593.xpery">collected on Goodreads</a>
+        </p>
+      </blockquote>
 
     <p>
         Today, I looked into Colab's options for GPUs. Turns out, they offer some compute units FOR FREE and I was able to fully 
@@ -80,13 +57,8 @@
         Here was the performance of the latest model. 
 
     </p>
-        <div style="text-align: center;">
-      <img
-        src="../photos/8-18/data.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 500px;      
-              height: auto;"
+        <div>
+      <img src="../photos/8-18/data.png" alt="Data — Reflections on Training v3 &amp; v4"
       />
     </div>
 
@@ -118,11 +90,11 @@
     </p>
   
     </article>
-
-
-    
+    <nav class="post-nav">
+      <a href="post20.html">← Exploring Existing Weights, Reconsidering Paths</a>
+      <span class="spacer"></span>
+    </nav>
   </main>
-
 
 </body>
 </html>

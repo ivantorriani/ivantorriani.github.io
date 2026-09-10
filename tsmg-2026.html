@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TSMG 2026 — Depth-Guided Precision Fertilization — Ivan Torriani</title>
+  <meta name="description" content="Depth-guided computer vision for precision agricultural fertilizer application, running in real time on a Jetson from a single RGB camera." />
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="icon" href="/icon_2.png" type="image/x-icon" />
+</head>
+<body>
+
+  <header class="project-header">
+    <a class="back" href="index.html">← Ivan Torriani</a>
+    <h1>Depth-Guided Precision Fertilization</h1>
+    <p class="subtitle">Real-time computer vision that decides where fertilizer goes, running on a Jetson from a single RGB camera — no LiDAR, no network. Cal Poly San Luis Obispo, TSMG 2026 Research Program.</p>
+  </header>
+
+  <main>
+
+    <div class="project-meta">
+      <div>
+        <dt>Role</dt>
+        <dd>AI/ML Research Intern</dd>
+      </div>
+      <div>
+        <dt>Dept</dt>
+        <dd>Cal Poly CS Department</dd>
+      </div>
+      <div>
+        <dt>Period</dt>
+        <dd>Sep 2025 – May 2026</dd>
+      </div>
+      <div>
+        <dt>Live</dt>
+        <dd><a href="https://ivantorriani.github.io/tsmg-2026/" target="_blank" rel="noopener">Project page</a></dd>
+      </div>
+    </div>
+
+    <article>
+
+      <p class="lede">Broadcast fertilizer application treats a field as uniform, delivering the same rate to bare soil that it delivers to dense canopy. The waste is both economic and environmental. Fixing it means applying only where plant material actually is — which requires a perception system that runs in real time on a moving implement, outdoors, without a network connection or a depth-sensor budget.</p>
+
+      <p>The constraint that shapes everything here is cost. Depth sensing is the natural way to separate canopy from background, and LiDAR is the natural way to get depth — but LiDAR units run $5,000 to $15,000, which is not a number that survives contact with a working farm. So the system infers depth from a single RGB camera instead, using monocular depth estimation, and eliminates the hardware entirely.</p>
+
+      <div class="figure-row">
+        <div class="stat">
+          <div class="value">7.5×</div>
+          <div class="label">Speedup on Jetson, 2 → 15 FPS</div>
+        </div>
+        <div class="stat">
+          <div class="value">+30%</div>
+          <div class="label">mAP improvement, canopy detector</div>
+        </div>
+        <div class="stat">
+          <div class="value">$5–15k</div>
+          <div class="label">LiDAR hardware eliminated</div>
+        </div>
+      </div>
+
+      <h3>Pipeline</h3>
+
+      <figure>
+        <svg class="diagram" viewBox="0 0 700 250" role="img" aria-label="Pipeline: RGB camera to MiDaS depth and YOLOv8 canopy detector, combined into a union mask, integrated over three horizontal zones, thresholded at 25 percent coverage, driving three Jetson GPIO lines and three nozzles.">
+          <defs>
+            <marker id="t-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+            </marker>
+          </defs>
+
+          <rect class="box" x="8" y="86" width="112" height="56" rx="2"/>
+          <text class="lbl" x="64" y="110" text-anchor="middle">RGB camera</text>
+          <text class="lbl" x="64" y="126" text-anchor="middle" fill="#888">single, no depth</text>
+
+          <line class="flow" x1="120" y1="114" x2="152" y2="114"/>
+          <path class="flow" d="M 152 114 L 152 60 L 178 60" marker-end="url(#t-ah)"/>
+          <path class="flow" d="M 152 114 L 152 168 L 178 168" marker-end="url(#t-ah)"/>
+
+          <rect class="box" x="180" y="34" width="130" height="52" rx="2"/>
+          <text class="lbl" x="245" y="55" text-anchor="middle">MiDaS depth</text>
+          <text class="lbl" x="245" y="71" text-anchor="middle" fill="#888">background suppression</text>
+
+          <rect class="box" x="180" y="142" width="130" height="52" rx="2"/>
+          <text class="lbl" x="245" y="163" text-anchor="middle">YOLOv8</text>
+          <text class="lbl" x="245" y="179" text-anchor="middle" fill="#888">canopy detector</text>
+
+          <path class="flow" d="M 310 60 L 336 60 L 336 114 L 362 114" marker-end="url(#t-ah)"/>
+          <path class="flow" d="M 310 168 L 336 168 L 336 114" />
+
+          <rect class="box" x="364" y="86" width="118" height="56" rx="2"/>
+          <text class="lbl" x="423" y="110" text-anchor="middle">Union mask</text>
+          <text class="lbl" x="423" y="126" text-anchor="middle" fill="#888">3 zones, 25% thr.</text>
+
+          <line class="flow" x1="482" y1="114" x2="514" y2="114" marker-end="url(#t-ah)"/>
+
+          <!-- zone stack -->
+          <rect class="box-soft" x="516" y="58"  width="80" height="34"/>
+          <rect class="box"      x="516" y="94"  width="80" height="34"/>
+          <rect class="box-soft" x="516" y="130" width="80" height="34"/>
+          <text class="lbl" x="556" y="79"  text-anchor="middle" fill="#888">zone 1</text>
+          <text class="lbl" x="556" y="115" text-anchor="middle">zone 2</text>
+          <text class="lbl" x="556" y="151" text-anchor="middle" fill="#888">zone 3</text>
+
+          <line class="flow" x1="596" y1="75"  x2="622" y2="75"  marker-end="url(#t-ah)"/>
+          <line class="flow" x1="596" y1="111" x2="622" y2="111" marker-end="url(#t-ah)"/>
+          <line class="flow" x1="596" y1="147" x2="622" y2="147" marker-end="url(#t-ah)"/>
+
+          <text class="lbl" x="628" y="68"  fill="#888">pin 7</text>
+          <text class="lbl" x="628" y="79"  fill="#888">off</text>
+          <text class="lbl" x="628" y="104">pin 33</text>
+          <text class="lbl" x="628" y="115">ON</text>
+          <text class="lbl" x="628" y="140" fill="#888">pin 35</text>
+          <text class="lbl" x="628" y="151" fill="#888">off</text>
+
+          <text class="lbl-sm" x="350" y="225" text-anchor="middle">one GPIO line per nozzle — no servo-aimed boom</text>
+        </svg>
+        <figcaption>Detections are reduced to a union mask and integrated over three horizontal zones aligned with the physical nozzle bar. Any zone crossing 25% coverage fires its nozzle.</figcaption>
+      </figure>
+
+      <p>The zone abstraction is the central design choice, and it is a deliberate refusal to be clever. Targeting individual plants would demand actuation precision the hardware does not have. Instead detections collapse into a union mask that gets integrated over three horizontal bands matched to the nozzle bar. <strong>It degrades gracefully under partial or noisy detection, and it maps onto a handful of GPIO lines rather than a servo-aimed boom.</strong></p>
+
+      <p>That is perception engineered down to what the actuator can actually do — a detector that misses half a canopy still activates the right zone, because the zone only needs 25% coverage to fire.</p>
+
+      <h3>Making relative depth metric</h3>
+
+      <p>MiDaS has a property that makes it awkward for this job: it returns <em>affine-invariant relative inverse depth</em>, not metres. It tells you what is nearer and what is further, on an arbitrary scale that shifts between frames. Deciding whether canopy is within spraying range needs real distance.</p>
+
+      <p>The fix is a single reference measurement. With one reading taken at a known two-foot standoff, the scale can be anchored:</p>
+
+      <pre><code>metric  = SCENE_1_SHIFT × dmax           # first-order linear
+D_ref   = 2.0 × (dmax_scene_1 / dmax)^s  # power-law refinement, s = 3.2</code></pre>
+
+      <p>A purely linear model fits badly, because inverse depth and physical distance are related non-linearly — roughly <em>D = 1/(ad + b)</em>. So the estimate is refined with a power law anchored at the same reference point. The exponent controls how sharply estimated distance falls off, and was chosen to maximize resolution at close range, where canopy proximity actually matters and where a spraying decision is actually made.</p>
+
+      <p>One calibration measurement replaces a depth sensor. That is the whole trick, and it is what makes the cost argument work.</p>
+
+      <h3>Running it fast enough</h3>
+
+      <p>Two neural networks per frame on a Jetson Nano started at 2 FPS, which is not real time on a moving implement. Getting to 15 FPS came from choosing a smaller depth backbone and then removing overhead everywhere it hid:</p>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr><th>Model</th><th>Backbone</th><th>Input</th><th>Aspect</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>dpt_beit_large_512</td><td>BEiT ViT-L/16</td><td class="num">512×512</td><td>preserved</td><td>Accuracy reference</td></tr>
+            <tr class="highlight"><td>dpt_swin2_tiny_256</td><td>Swin V2 Tiny</td><td class="num">256×256</td><td>square crop</td><td>Jetson deployment</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Custom metric-distance algorithms made the smaller 100–150MB MiDaS models viable, which is what unlocked the speedup.</p>
+
+      <p>On top of the model swap: FP16 inference, <code>channels_last</code> memory format, Conv+BN folding via YOLO's <code>fuse()</code>, <code>cudnn.benchmark</code>, and inference wrapped in <code>no_grad()</code>. Throughput is tracked with an exponential moving average so a single slow frame doesn't read as a regression.</p>
+
+      <p>The detector itself was trained across <strong>10+ YOLO model variants on a 1,000+ image dataset</strong> on Google Cloud GPUs, tuned by confusion-matrix and precision–recall analysis for a <strong>30% mAP improvement</strong>. The research log below covers that work as it happened.</p>
+
+      <h3>Demo</h3>
+
+      <figure>
+        <video controls preload="metadata" playsinline>
+          <source src="assets/tsmg/demo.mp4" type="video/mp4" />
+          Your browser does not support embedded video. <a href="assets/tsmg/demo.mp4">Download the demo</a>.
+        </video>
+        <figcaption>Offline validation run over field footage, with live per-zone coverage percentages overlaid.</figcaption>
+      </figure>
+
+      <h3>Bringing up the hardware</h3>
+
+      <p>The GPIO work was staged so that each step isolated exactly one unknown — a habit that pays for itself the first time something doesn't work and you know precisely which layer to blame.</p>
+
+      <ul class="spec-list">
+        <li><span class="k">Stage 1</span><span class="v">Single toggle via <code>gpiod</code> v2 — electrical continuity only</span></li>
+        <li><span class="k">Stage 2</span><span class="v">Sustained 1s toggle loop via <code>gpiod</code> legacy — does it hold up over time</span></li>
+        <li><span class="k">Stage 3</span><span class="v">Same loop through <code>Jetson.GPIO</code> on BOARD pin 7 — library and pin convention</span></li>
+        <li><span class="k">Stage 4</span><span class="v">Keyboard-driven two-channel control on pins 7 and 33 — independent channels</span></li>
+      </ul>
+
+      <p>The first working design then had to be thrown away. With only two pins available for three zones, v1 used a combinatorial encoding — <code>pin1 = top OR middle</code>, <code>pin2 = top OR bottom</code>. It worked until two zones needed to be active at once, at which point the encoding could not represent the state without transient conflicts: brief moments where a nozzle fired that shouldn't have. v2 uses three pins, one per zone, on BOARD 7 / 33 / 35. Less elegant, and correct.</p>
+
+      <p>The pipeline also degrades rather than dying when the hardware isn't there — <code>Jetson.GPIO</code> is imported inside a try/except, and its absence disables GPIO output so the vision stack still runs on a laptop for development.</p>
+
+      <h3>Research log</h3>
+
+      <p>Field notes from the dataset and training work behind the detector.</p>
+
+      <ul class="log-list">
+        <li><a href="posts/cvf_blogs/post1.html"><span class="date">Aug 17, 2025</span>Labeling Image Datasets, Future of Labeling, Evaluating</a></li>
+        <li><a href="posts/cvf_blogs/post2.html"><span class="date">Aug 17, 2025</span>Labeling Guidelines and GCP</a></li>
+        <li><a href="posts/cvf_blogs/post3.html"><span class="date">Aug 28, 2025</span>Roboflow Preprocessing to Ultralytics Hub Training</a></li>
+        <li><a href="posts/cvf_blogs/post4.html"><span class="date">Aug 31, 2025</span>Setup Training Environment + Future Training</a></li>
+      </ul>
+
+      <h3>System</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">Depth</span><span class="v">MiDaS DPT (Swin V2 Tiny deployed, BEiT ViT-L as reference), single-reference metric calibration with power-law refinement</span></li>
+        <li><span class="k">Detection</span><span class="v">YOLOv8, custom-trained canopy weights</span></li>
+        <li><span class="k">Actuation</span><span class="v">Jetson.GPIO, 3 lines on BOARD pins 7 / 33 / 35, one per nozzle zone</span></li>
+        <li><span class="k">Optimization</span><span class="v">FP16, channels_last, Conv+BN fusion, cudnn.benchmark, EMA-smoothed FPS</span></li>
+        <li><span class="k">Stack</span><span class="v">Python, PyTorch, Ultralytics, OpenCV, timm, imutils, NumPy</span></li>
+      </ul>
+
+      <h3>Limitations</h3>
+
+      <div class="limitations">
+        <ul>
+          <li>Depth is affine-invariant and calibrated from a single reference point, with a hand-fitted exponent. Calibration error across a full distance sweep is still being measured.</li>
+          <li><code>dmax</code> is sensitive to a single outlier pixel, and there is no temporal filtering on the depth signal.</li>
+          <li>The 25% coverage threshold is hard, with no hysteresis — a zone hovering near the boundary will chatter.</li>
+          <li>Axis-aligned bounding boxes inflate measured coverage relative to actual canopy area.</li>
+          <li>Zones are equal image thirds rather than being calibrated to real spray geometry.</li>
+          <li>Formal per-zone activation accuracy and on-hardware throughput evaluation are still being collected; the public project page deliberately publishes no results until they are.</li>
+        </ul>
+      </div>
+
+      <div class="link-row">
+        <a href="https://ivantorriani.github.io/tsmg-2026/" target="_blank" rel="noopener">Full project page</a>
+      </div>
+
+    </article>
+
+  </main>
+
+</body>
+</html>

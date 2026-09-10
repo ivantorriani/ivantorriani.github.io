@@ -1,25 +1,23 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM Blog</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <title>Model Outputs, Cross Entropy, other Evaluations — Ivan Torriani</title>
+  <link rel="stylesheet" href="../css/minimal.css" />
+  <link rel="icon" href="../icon_2.png" type="image/x-icon" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </head>
 <body>
-  <header>
-    <h1>My Blog</h1>
-    <nav>
-      <a href="../index.html">Home</a>
-    </nav>
+  <header class="page-header">
+    <h1>Model Outputs, Cross Entropy, other Evaluations</h1>
+    <a class="back" href="../llm-blog.html">← LLM Blog</a>
   </header>
 
   <main>
     <article>
-      <h2>Model Outputs, Cross Entropy, other Evaluations</h2>
-      <p><em>August 6, 2025</em></p>
+      <p class="post-meta">August 6, 2025</p>
     
     <p>
       We went over this briefly yesterday, but it's useful to look into it a bit more. 
@@ -32,13 +30,8 @@
       dataset setup results in a process such that multiple predictions are being made per sequeunce. 
       This photo is pretty helpfulu:
     </p>
-    <div style="text-align: center;">
-      <img
-        src="../photos/8-6/pic02.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 600px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/8-6/pic02.png" alt="Figure 2 — Model Outputs, Cross Entropy, other Evaluations"
       />
     </div>
     
@@ -52,13 +45,8 @@
       also of a full training load.  Take a look: 
     </p>
 
-        <div style="text-align: center;">
-      <img
-        src="../photos/8-6/pic03.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 600px;      /* shrink this to taste */
-              height: auto;"
+        <div>
+      <img src="../photos/8-6/pic03.png" alt="Figure 3 — Model Outputs, Cross Entropy, other Evaluations"
       />
     </div>
 
@@ -85,9 +73,10 @@
     
   
     </article>
-
-
-    
+    <nav class="post-nav">
+      <a href="post13.html">← Generating Text</a>
+      <a href="post15.html">Chores and Training →</a>
+    </nav>
   </main>
 
 

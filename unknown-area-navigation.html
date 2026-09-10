@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unknown Area Navigation — Ivan Torriani</title>
+  <meta name="description" content="A multimodal perception pipeline that lets autonomous navigation systems handle objects and scenes they were never trained on." />
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="icon" href="/icon_2.png" type="image/x-icon" />
+</head>
+<body>
+
+  <header class="project-header">
+    <a class="back" href="index.html">← Ivan Torriani</a>
+    <h1>Unknown Area Navigation</h1>
+    <p class="subtitle">A multimodal perception pipeline for out-of-distribution autonomous navigation — published in the CSAI Journal of Computer Science, Cal Poly San Luis Obispo.</p>
+  </header>
+
+  <main>
+
+    <div class="project-meta">
+      <div>
+        <dt>Role</dt>
+        <dd>AI/ML Research Team Lead</dd>
+      </div>
+      <div>
+        <dt>Team</dt>
+        <dd>4 teams — 1 hardware, 3 software</dd>
+      </div>
+      <div>
+        <dt>Period</dt>
+        <dd>Jan – May 2026</dd>
+      </div>
+      <div>
+        <dt>Output</dt>
+        <dd>Published paper</dd>
+      </div>
+    </div>
+
+    <article>
+
+      <p class="lede">Despite the name, deep learning models don't learn. Once trained, a model can only act inside the domain it was trained on. A navigation stack tuned on high-infrastructure urban driving has no idea what to do with a tractor on a rural road, or a pedestrian in a costume. As environments get less predictable, autonomous navigation gets less useful — exactly where it would be most valuable.</p>
+
+      <p>This is a four-phase program to let vehicles operate in out-of-domain environments — disaster zones, rural areas — where standard models fail. The phase documented here, and the one carrying published results, is the perception layer: rather than retraining or replacing an existing navigation system, it <strong>layers on top of one</strong> and handles the inputs the base detector was never trained on.</p>
+
+      <p>The insight driving the design is that a system doesn't need to identify an unknown object to act safely around it. It needs to notice that something is unknown, ask a more capable model whether the scene ahead is passable, and gate its own motion on the answer.</p>
+
+      <h3>Pipeline</h3>
+
+      <figure>
+        <svg class="diagram" viewBox="0 0 700 272" role="img" aria-label="Six-stage pipeline: capture, unknown object detection, persistence gate, multimodal query, navigation, display, then loop back to capture.">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+            </marker>
+            <marker id="ahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#bbb"/>
+            </marker>
+          </defs>
+
+          <!-- row 1 -->
+          <rect class="box" x="10"  y="40" width="180" height="62" rx="2"/>
+          <text class="lbl" x="100" y="66" text-anchor="middle">1. Capture</text>
+          <text class="lbl" x="100" y="83" text-anchor="middle" fill="#888">Webcam frame</text>
+
+          <rect class="box" x="260" y="40" width="180" height="62" rx="2"/>
+          <text class="lbl" x="350" y="66" text-anchor="middle">2. Unknown Object</text>
+          <text class="lbl" x="350" y="83" text-anchor="middle">Detection</text>
+
+          <rect class="box" x="510" y="40" width="180" height="62" rx="2"/>
+          <text class="lbl" x="600" y="66" text-anchor="middle">3. Persistence Gate</text>
+          <text class="lbl" x="600" y="83" text-anchor="middle" fill="#888">8 frames</text>
+
+          <line class="flow" x1="190" y1="71" x2="253" y2="71" marker-end="url(#ah)"/>
+          <line class="flow" x1="440" y1="71" x2="503" y2="71" marker-end="url(#ah)"/>
+          <text class="lbl-sm" x="471" y="62" text-anchor="middle">candidate</text>
+
+          <!-- down the right side -->
+          <path class="flow" d="M 600 102 L 600 183" marker-end="url(#ah)"/>
+          <text class="lbl-sm" x="609" y="147">persisted</text>
+
+          <!-- row 2 -->
+          <rect class="box" x="510" y="190" width="180" height="62" rx="2"/>
+          <text class="lbl" x="600" y="216" text-anchor="middle">4. Multimodal Query</text>
+          <text class="lbl" x="600" y="233" text-anchor="middle" fill="#888">VLM traversability</text>
+
+          <rect class="box" x="260" y="190" width="180" height="62" rx="2"/>
+          <text class="lbl" x="350" y="216" text-anchor="middle">5. Navigation</text>
+          <text class="lbl" x="350" y="233" text-anchor="middle" fill="#888">AprilTag + gating</text>
+
+          <rect class="box" x="10"  y="190" width="180" height="62" rx="2"/>
+          <text class="lbl" x="100" y="216" text-anchor="middle">6. Display</text>
+          <text class="lbl" x="100" y="233" text-anchor="middle" fill="#888">Annotated overlay</text>
+
+          <line class="flow" x1="510" y1="221" x2="447" y2="221" marker-end="url(#ah)"/>
+          <text class="lbl-sm" x="478" y="212" text-anchor="middle">verdict</text>
+          <line class="flow" x1="260" y1="221" x2="197" y2="221" marker-end="url(#ah)"/>
+
+          <!-- loop back up the left column -->
+          <path class="flow-soft" d="M 100 190 L 100 109" marker-end="url(#ahs)"/>
+          <text class="lbl-sm" x="112" y="153">next frame</text>
+
+        </svg>
+        <figcaption>Forward motion is gated on the traversability verdict — the vehicle does not advance past an unknown until a vision-language model has judged the scene passable.</figcaption>
+      </figure>
+
+      <p>The <strong>persistence gate</strong> is the piece that makes this practical rather than merely possible. A candidate unknown must appear for eight consecutive frames before it counts as real. Object detectors flicker constantly, and without the gate every frame of noise would fire an API call. With it, detector jitter is filtered out before anything expensive happens, and queries are further held to a five-second cooldown.</p>
+
+      <h3>Detecting what the model doesn't know</h3>
+
+      <p>Three approaches were built and run head-to-head over an identical protocol: five known objects (scissors, cell phone, fork, knife, cup) and five unknown ones (thermometer, lighter, chapstick, keys, inhaler), each presented three times, for 30 trials per approach.</p>
+
+      <figure>
+        <svg class="diagram" viewBox="0 0 700 260" role="img" aria-label="Bar chart of 30-trial detection results. Confidence-thresholded YOLO-World scores 93.3 percent on accuracy, precision, recall and F1. Dual-model consensus scores 80.0, 84.6, 73.3, 78.6. Colour histogram change detection scores 53.3, 66.7, 13.3, 22.2.">
+          <!-- y axis -->
+          <line class="axis" x1="42" y1="20"  x2="690" y2="20"/>
+          <line class="axis" x1="42" y1="68"  x2="690" y2="68"/>
+          <line class="axis" x1="42" y1="116" x2="690" y2="116"/>
+          <line class="axis" x1="42" y1="164" x2="690" y2="164"/>
+          <line class="axis" x1="42" y1="212" x2="690" y2="212" stroke="#999"/>
+          <text class="lbl-sm" x="34" y="23"  text-anchor="end">100</text>
+          <text class="lbl-sm" x="34" y="71"  text-anchor="end">75</text>
+          <text class="lbl-sm" x="34" y="119" text-anchor="end">50</text>
+          <text class="lbl-sm" x="34" y="167" text-anchor="end">25</text>
+          <text class="lbl-sm" x="34" y="215" text-anchor="end">0</text>
+
+          <!-- group 1: YOLO-World  93.3 93.3 93.3 93.3 -->
+          <rect class="bar"       x="70"  y="33.1" width="28" height="178.9"/>
+          <rect class="bar-alt"   x="102" y="33.1" width="28" height="178.9"/>
+          <rect class="bar-faint" x="134" y="33.1" width="28" height="178.9"/>
+          <rect class="bar"       x="166" y="33.1" width="28" height="178.9" opacity="0.55"/>
+          <text class="val" x="84"  y="28" text-anchor="middle">93.3</text>
+          <text class="val" x="116" y="28" text-anchor="middle">93.3</text>
+          <text class="val" x="148" y="28" text-anchor="middle">93.3</text>
+          <text class="val" x="180" y="28" text-anchor="middle">93.3</text>
+          <text class="lbl" x="132" y="230" text-anchor="middle">Confidence-Thresholded</text>
+          <text class="lbl" x="132" y="245" text-anchor="middle">YOLO-World</text>
+
+          <!-- group 2: consensus 80.0 84.6 73.3 78.6 -->
+          <rect class="bar"       x="284" y="58.4"  width="28" height="153.6"/>
+          <rect class="bar-alt"   x="316" y="49.6"  width="28" height="162.4"/>
+          <rect class="bar-faint" x="348" y="71.4"  width="28" height="140.6"/>
+          <rect class="bar"       x="380" y="61.3"  width="28" height="150.7" opacity="0.55"/>
+          <text class="val" x="298" y="53"  text-anchor="middle">80.0</text>
+          <text class="val" x="330" y="44"  text-anchor="middle">84.6</text>
+          <text class="val" x="362" y="66"  text-anchor="middle">73.3</text>
+          <text class="val" x="394" y="56"  text-anchor="middle">78.6</text>
+          <text class="lbl" x="346" y="230" text-anchor="middle">Dual-Model Consensus</text>
+          <text class="lbl" x="346" y="245" text-anchor="middle">(NanoOWL + YOLO-World)</text>
+
+          <!-- group 3: histogram 53.3 66.7 13.3 22.2 -->
+          <rect class="bar"       x="498" y="109.7" width="28" height="102.3"/>
+          <rect class="bar-alt"   x="530" y="84.0"  width="28" height="128.0"/>
+          <rect class="bar-faint" x="562" y="186.5" width="28" height="25.5"/>
+          <rect class="bar"       x="594" y="169.4" width="28" height="42.6" opacity="0.55"/>
+          <text class="val" x="512" y="104" text-anchor="middle">53.3</text>
+          <text class="val" x="544" y="79"  text-anchor="middle">66.7</text>
+          <text class="val" x="576" y="181" text-anchor="middle">13.3</text>
+          <text class="val" x="608" y="164" text-anchor="middle">22.2</text>
+          <text class="lbl" x="560" y="230" text-anchor="middle">Colour Histogram</text>
+          <text class="lbl" x="560" y="245" text-anchor="middle">Change Detection</text>
+        </svg>
+        <div class="chart-legend">
+          <span><i class="sw-dark"></i>Accuracy</span>
+          <span><i class="sw-mid"></i>Precision</span>
+          <span><i class="sw-light"></i>Recall</span>
+          <span><i style="background:#111;opacity:0.55"></i>F1</span>
+        </div>
+        <figcaption>30 trials per approach, scored by confusion matrix. All values are percentages.</figcaption>
+      </figure>
+
+      <p>These were not three guesses evaluated once. The unknown-object detection feature went through four versions, each one a hypothesis formed from qualitative analysis of where the previous version failed, then validated with a controlled test against the same 30-trial protocol.</p>
+
+      <p>Confidence-thresholded YOLO-World won decisively at <strong>93.3% accuracy and 93.3% F1</strong>. The more elaborate approach lost: running two open-vocabulary models and requiring them to agree cost 13 points of accuracy, because consensus turns any single model's miss into a system-wide miss.</p>
+
+      <p>The colour-histogram baseline is the instructive failure. Its precision looks survivable at 66.7% — but its recall is <strong>13.3%</strong>. It missed 13 of 15 unknowns. And for navigation, recall is the metric that matters: a false alarm costs a wasted API call, while a missed unknown is a vehicle driving into something it does not understand. An approach can look tolerable on aggregate accuracy and still be unusable.</p>
+
+      <h3>Which model judges the scene</h3>
+
+      <p>Once an unknown persists, a frame goes to a vision-language model, which returns a structured JSON verdict: a scene description, a binary traversable / not-traversable call, and a justification. Six models were evaluated — four run locally, two through cloud APIs — against nine held-out scenes.</p>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr><th>Model</th><th>Accuracy</th><th>Mean latency</th><th>Total, 9 images</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight"><td>GPT-4.1-nano</td><td class="num">88.9% (8/9)</td><td class="num">1.894 s</td><td class="num">17.049 s</td></tr>
+            <tr><td>Gemini 2.5 Flash Lite</td><td class="num">77.8% (7/9)</td><td class="num">1.944 s</td><td class="num">17.500 s</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Identical structured-JSON prompt across both models.</p>
+
+      <p>The aggregate numbers are close. The error analysis is what's worth reading: the two models fail in <em>opposite directions</em>. Gemini was over-permissive — it cleared a person in a morph suit standing beside a novelty pedestrian sign as traversable. It was also over-conservative in a different way, refusing a graffiti-covered bridge, having apparently read visual degradation as a proxy for structural unsafety. GPT's single miss ran the other way: it refused a clear road because a hitchhiker was standing on it.</p>
+
+      <p>Both were reliable on the unambiguous cases — fallen tree, flooded road, livestock in the road, aircraft blocking the road. The disagreements cluster entirely on scenes involving <em>people behaving unusually</em>, which is precisely the out-of-distribution category the system exists to handle.</p>
+
+      <h3>The local-model finding</h3>
+
+      <div class="figure-row">
+        <div class="stat">
+          <div class="value">10–30+ min</div>
+          <div class="label">Per image, local VLM on CPU</div>
+        </div>
+        <div class="stat">
+          <div class="value">2–5 sec</div>
+          <div class="label">Per image, cloud API</div>
+        </div>
+        <div class="stat">
+          <div class="value">~300×</div>
+          <div class="label">Practical gap</div>
+        </div>
+      </div>
+
+      <p>All four local models — Qwen2-VL-7B, LLaVA-1.5-7B, Moondream2, InternVL2-2B — took between ten and thirty-plus minutes per image on CPU. Cloud APIs answered in two to five seconds. For a system whose entire purpose is deciding whether to keep moving, that difference isn't a tuning problem, it's a design constraint: on-vehicle inference without a GPU is off the table, which makes network availability a first-class architectural concern rather than a convenience.</p>
+
+      <p>This is the kind of result that only shows up if you actually build and measure the alternatives, and it changed the shape of the rest of the system.</p>
+
+      <h3>Demo</h3>
+
+      <figure>
+        <video controls preload="metadata" playsinline>
+          <source src="assets/uan/demo.mp4" type="video/mp4" />
+          Your browser does not support embedded video. <a href="assets/uan/demo.mp4">Download the demo</a>.
+        </video>
+        <figcaption>End-to-end run: detection, persistence gating, VLM query, and AprilTag movement commands.</figcaption>
+      </figure>
+
+      <h3>System</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">Detection</span><span class="v">YOLO-World (YOLOv8s-worldv2) open-vocabulary detection, 25% minimum confidence with a 50% known/unknown cutoff; NanoOWL (OWL-ViT) for the consensus variant at 0.20 IoU matching</span></li>
+        <li><span class="k">Gating</span><span class="v">8-frame persistence requirement, 5-second query cooldown</span></li>
+        <li><span class="k">Interpretation</span><span class="v">Six VLMs evaluated — Qwen2-VL-7B, LLaVA-1.5-7B, Moondream2, InternVL2-2B locally in fp16; GPT-4.1-nano and Gemini 2.5 Flash Lite via API</span></li>
+        <li><span class="k">Navigation</span><span class="v">AprilTag fiducial pose estimation (115mm tags, calibrated intrinsics), ±75mm lateral dead-band, 100mm stop distance, with obstacle recovery logic</span></li>
+        <li><span class="k">Testing</span><span class="v">Property-based tests via Hypothesis — 5 declared properties × 100 generated examples, proving all six model backends parse verdicts and format output identically</span></li>
+        <li><span class="k">Stack</span><span class="v">Python, PyTorch, Ultralytics, OpenCV, transformers, pupil-apriltags</span></li>
+      </ul>
+
+      <p>The property-based testing deserves a note. Six different model backends all had to produce the same downstream contract. Rather than spot-checking each, the shared parsing and formatting utilities were tested by declaring five invariants and letting Hypothesis generate a hundred random inputs against each — so a malformed response from any backend fails loudly instead of silently propagating a wrong traversability call into the navigation layer.</p>
+
+      <h3>Limitations</h3>
+
+      <div class="limitations">
+        <ul>
+          <li>The three subsystems were evaluated independently. The quantitative results above are per-subsystem; end-to-end integration is exercised by the demos but not separately measured.</li>
+          <li>A custom class-agnostic detection model was designed but not trained, so the open-set detection still leans on an open-vocabulary model rather than a purpose-built one.</li>
+          <li>The VLM comparison rests on nine scenes. It is enough to expose the opposite-failure-direction pattern, not enough to rank the models with confidence.</li>
+          <li>Cloud inference makes network availability a dependency — the local-model timing results show that removing it is not currently a viable trade.</li>
+          <li>Later phases of the program, including the meta-learning and few-shot adaptation work, remain in progress.</li>
+        </ul>
+      </div>
+
+      <div class="link-row">
+        <a href="assets/uan/paper.pdf">Read the paper (PDF)</a>
+        <a href="https://github.com/calpoly-csai" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+    </article>
+
+  </main>
+
+</body>
+</html>

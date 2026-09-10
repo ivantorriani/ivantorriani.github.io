@@ -3,36 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM Blog — Ivan Torriani</title>
+  <title>Building a Language Model From Scratch — Ivan Torriani</title>
   <link rel="stylesheet" href="css/minimal.css" />
   <link rel="icon" href="/icon_2.png" type="image/x-icon" />
 </head>
 <body>
 
   <header class="page-header">
-    <h1>LLM Blog</h1>
-    <a class="back" href="index.html">← Home</a>
+    <h1>Building a Language Model From Scratch</h1>
+    <a class="back" href="index.html">← Ivan Torriani</a>
   </header>
 
   <main>
 
     <div class="section">
       <p class="update-note">Last updated 8/19/25 — xperyv4 posted</p>
-      <p class="intro-text">Here I share my thoughts, implementations, and explanations of my LLM project. Earlier on you'll find conceptual and mathematical explanations of the entire architecture — attention mechanisms, transformer blocks, and more. Later on, evaluations and reflections from continuous training and revising of my models.</p>
+      <p class="intro-text">A build log for a ~150M-parameter transformer written from scratch — causal multi-head attention and positional embeddings per <em>Attention Is All You Need</em>, with no framework doing the interesting parts. The early posts work through the conceptual and mathematical scaffolding: attention, transformer blocks, normalization. The later ones cover training three checkpoints on 80GB+ of text to roughly 45 perplexity, and what evaluation revealed each time.</p>
     </div>
 
     <div class="section">
       <p class="section-label">Posts</p>
       <ul class="post-list">
+        <li><a href="posts/post1.html">PyTorch, Computational Graphs, Gradients</a></li>
+        <li><a href="posts/post2.html">AutoGrad, Data Loaders, Multi-Layer Networks</a></li>
+        <li><a href="posts/post3.html">Understanding Embeddings, Encoding, Decoding</a></li>
+        <li><a href="posts/post4.html">Finishing up Embeddings, Attention Mechanisms</a></li>
         <li><a href="posts/post5.html">Mathematics of Attention Mechanisms</a></li>
         <li><a href="posts/post6.html">Implementation of Weights, Self Attention</a></li>
-        <li><a href="posts/post7.html">Dropouts, Masking, Casual Attention</a></li>
+        <li><a href="posts/post7.html">Masking, Dropouts, Causal Attention</a></li>
         <li><a href="posts/post8.html">Re-implementing Attention Mechanisms</a></li>
         <li><a href="posts/post9.html">Early Explorations of GPT Architecture</a></li>
         <li><a href="posts/post10.html">nn.Linear Steps and Normalization</a></li>
         <li><a href="posts/post11.html">Deeper Normalization, GELU, Feed Forward</a></li>
         <li><a href="posts/post12.html">Shortcut Connections, Transformers, and Analytics</a></li>
-        <li><a href="posts/post13.html">"It's alive! It's alive!"</a></li>
+        <li><a href="posts/post13.html">It's alive! It's alive!</a></li>
         <li><a href="posts/post14.html">Model Outputs, Cross Entropy, other Evaluations</a></li>
         <li><a href="posts/post15.html">Chores and Training</a></li>
         <li><a href="posts/post16.html">Integration, Experimentation, Temperature, Top K</a></li>
@@ -40,7 +44,7 @@
         <li><a href="posts/post18.html">Gutenberg Begins Training, 36 Hours to Go</a></li>
         <li><a href="posts/post19.html">Exuperyv2 Out, Early Looks</a></li>
         <li><a href="posts/post20.html">Exploring Existing Weights, Reconsidering Paths</a></li>
-        <li><a href="posts/post21.html">Reflections on v3 and v4</a></li>
+        <li><a href="posts/post21.html">Reflections on Training v3 and v4</a></li>
       </ul>
     </div>
 

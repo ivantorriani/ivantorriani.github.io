@@ -1,25 +1,23 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM Blog</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <title>Normalization and nn.Linear — Ivan Torriani</title>
+  <link rel="stylesheet" href="../css/minimal.css" />
+  <link rel="icon" href="../icon_2.png" type="image/x-icon" />
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </head>
 <body>
-  <header>
-    <h1>My Blog</h1>
-    <nav>
-      <a href="../index.html">Home</a>
-    </nav>
+  <header class="page-header">
+    <h1>Normalization and nn.Linear</h1>
+    <a class="back" href="../llm-blog.html">← LLM Blog</a>
   </header>
 
   <main>
     <article>
-      <h2>Normalization and <code> nn.Linear </code></h2>
-      <p><em>July 31, 2025</em></p>
+      <p class="post-meta">July 31, 2025</p>
 
       <p>
         Today I just worked my way through the basic architecture again. On side notes,
@@ -44,13 +42,8 @@
         layer <code> nn.Linear </code>, which is defined by this equation: 
       </p>
 
-    <div style="text-align: center;">
-      <img
-        src="../photos/6-31/math2.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 400px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/6-31/math2.png" alt="Figure 2 — Normalization and nn.Linear"
       />
     </div>
 
@@ -62,13 +55,8 @@
         logistic regression in machine learning, one of the most basic layers. However, let's view
         a graph of how this linear layer behaves when the input is a batch. 
     </p>
-    <div style="text-align: center;">
-      <img
-        src="../photos/6-31/math1.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 600px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/6-31/math1.png" alt="Figure 1 — Normalization and nn.Linear"
       />
       </div>
 
@@ -88,22 +76,12 @@
         Here is some of the mathematics invovled: 
       </p>
 
-    <div style="text-align: center;">
-      <img
-        src="../photos/6-31/math3.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 500px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/6-31/math3.png" alt="Figure 3 — Normalization and nn.Linear"
       />
       </div>
-    <div style="text-align: center;">
-      <img
-        src="../photos/6-31/math4.png"
-        alt="Descriptive alt text"
-        style="display: inline-block;
-              width: 450px;      /* shrink this to taste */
-              height: auto;"
+    <div>
+      <img src="../photos/6-31/math4.png" alt="Figure 4 — Normalization and nn.Linear"
       />
       </div>
 
@@ -126,9 +104,10 @@
 
   
     </article>
-
-
-    
+    <nav class="post-nav">
+      <a href="post9.html">← Early Explorations of GPT Architecture</a>
+      <a href="post11.html">Deeper Normalization, GELU, Feed Forward →</a>
+    </nav>
   </main>
 
 
