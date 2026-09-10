@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ivan Torriani</title>
-  <meta name="description" content="Computer vision and machine learning research — perception systems built to work outside the distribution they were trained on." />
+  <meta name="description" content="Incoming President of Cal Poly CSAI. AI/ML research and engineering across computer vision, language models, recommendation systems, and the products they ship inside." />
   <link rel="stylesheet" href="css/minimal.css" />
   <link rel="icon" href="/icon_2.png" type="image/x-icon" />
 </head>
@@ -13,57 +13,63 @@
   <header class="home-header">
     <h1>Ivan Torriani</h1>
     <p class="affil">B.S. Computer Science, AI/ML Concentration — Cal Poly San Luis Obispo, May 2028</p>
-    <p class="positioning">I work on computer vision and machine learning systems. The through-line across most of it is perception that has to keep working outside the distribution it was trained on — vehicles in environments no dataset covered, a fertilizer rig with no depth sensor, a recommender with no interaction history.</p>
+    <p class="positioning">I lead technical teams and build the systems myself. I was selected as <strong>incoming President of Cal Poly CSAI — the largest computing organization on campus, with 1,000+ members</strong> — after a year as Director of Research, running the club's portfolio across four teams and launching both the CSAI Journal of Computer Science and a $1,000 scholarship hackathon.</p>
+    <p class="positioning">The technical range underneath that is deliberately broad: computer vision and embedded inference, transformer language models trained from scratch, recommendation systems, and the full-stack web and mobile products they ship inside. I've owned product vision and success criteria for a four-phase research program, run four teams on an Agile cadence, and shipped software to production for real users at the Surfrider Foundation.</p>
+    <p class="positioning">The part I care about is the space between a model and a decision — working out what a system actually needs to do, proving that it does it, and getting it in front of people.</p>
   </header>
 
   <main>
 
     <div class="section">
-      <p class="section-label">Now</p>
-      <ul class="also-list">
-        <li><strong>Director of Research → incoming President, Cal Poly CSAI</strong> — selected to lead the largest computing club at Cal Poly, 1,000+ members, after directing the research portfolio for 2026–2027. Launched the CSAI Journal of Computer Science and a $1,000 scholarship hackathon, and presented research showcases to audiences of 100+ students, faculty, and industry guests.</li>
-      </ul>
-    </div>
-
-    <div class="section">
       <p class="section-label">Selected Work</p>
 
       <a class="work-item" href="unknown-area-navigation.html">
-        <h3>Unknown Area Navigation</h3>
-        <p class="hook">A perception layer that lets an autonomous navigation stack handle objects and scenes it was never trained on — flagging unknowns, then gating forward motion on a vision-language model's traversability verdict. Published in the CSAI Journal of Computer Science.</p>
-        <p class="metric">93.3% F1 unknown-object detection · Led 4 teams</p>
+        <div class="work-text">
+          <p class="eyebrow">Published research · Team lead</p>
+          <h3>Multimodal Perception for Out-of-Distribution Autonomous Navigation</h3>
+          <p class="hook">A perception layer that lets an autonomous navigation stack handle objects and scenes it was never trained on — flagging unknowns, then gating forward motion on a vision-language model's traversability verdict. Published in the CSAI Journal of Computer Science.</p>
+          <p class="metric">93.3% F1 unknown-object detection · Led 4 teams</p>
+        </div>
+        <div class="work-thumb">
+          <img src="assets/thumbs/uan.jpg" alt="Dashcam frame with the system's overlay reading Gemini: NOT TRAVERSABLE (Go Around)" loading="lazy" />
+        </div>
       </a>
 
       <a class="work-item" href="tsmg-2026.html">
-        <h3>Depth-Guided Precision Fertilization</h3>
-        <p class="hook">Real-time canopy detection that decides where fertilizer goes, running on a Jetson from a single RGB camera. Monocular depth estimation replaces the LiDAR the budget could never absorb.</p>
-        <p class="metric">7.5× Jetson speedup · +30% mAP · $5–15k hardware eliminated</p>
+        <div class="work-text">
+          <p class="eyebrow">Applied research · Cal Poly CS Department</p>
+          <h3>Depth-Guided Computer Vision for Precision Agricultural Fertilization</h3>
+          <p class="hook">Real-time canopy detection deciding where fertilizer goes, running on a Jetson from a single RGB camera. Monocular depth estimation replaces the LiDAR the budget could never absorb.</p>
+          <p class="metric">7.5× Jetson speedup · +30% mAP · $5–15k hardware eliminated</p>
+        </div>
+        <div class="work-thumb">
+          <img src="assets/thumbs/tsmg.jpg" alt="Vineyard frame with a canopy detection box labelled 67.58% and nozzle zone overlays" loading="lazy" />
+        </div>
       </a>
 
       <a class="work-item" href="albummer.html">
-        <h3>albummer</h3>
-        <p class="hook">Letterboxd for music — a full-stack web and mobile app with three recommendation systems, built to solve cold-start with no interaction data and no access to Spotify's deprecated audio-features API.</p>
-        <p class="metric">Three recommenders · Web + mobile · Built in 10 days</p>
+        <div class="work-text">
+          <p class="eyebrow">Full-stack product · Solo build</p>
+          <h3>Hybrid Recommendation Architecture for Cold-Start Music Discovery</h3>
+          <p class="hook">A social album-logging platform on web and mobile, with three recommendation systems built to work with no interaction history and no access to Spotify's deprecated audio-features API.</p>
+          <p class="metric">Three recommenders · Web + mobile · Built in 10 days</p>
+        </div>
+        <div class="work-thumb">
+          <img src="assets/thumbs/albummer.jpg" alt="The albummer editorial feature page, titled The Aestheticist" loading="lazy" />
+        </div>
       </a>
-    </div>
-
-    <div class="section">
-      <p class="section-label">Writing</p>
 
       <a class="work-item" href="llm-blog.html">
-        <h3>Building a Language Model From Scratch</h3>
-        <p class="hook">Twenty-one posts tracking a ~150M-parameter transformer built from nothing — the mathematics of attention, causal masking and transformer blocks, then training runs, evaluation, and what went wrong. Written while learning it, not after.</p>
-        <p class="metric">3 checkpoints · 80GB+ text · ~45 perplexity</p>
+        <div class="work-text">
+          <p class="eyebrow">From-scratch implementation · 21-post build log</p>
+          <h3>A 150M-Parameter Transformer Language Model Built From Scratch</h3>
+          <p class="hook">Causal multi-head attention and positional embeddings implemented from the paper up, with no framework doing the interesting parts — then trained, evaluated, and documented across twenty-one posts as it happened.</p>
+          <p class="metric">3 checkpoints · 80GB+ text · ~45 perplexity</p>
+        </div>
+        <div class="work-thumb">
+          <img src="assets/thumbs/llm.jpg" alt="Training and validation loss curves over five epochs" loading="lazy" />
+        </div>
       </a>
-    </div>
-
-    <div class="section">
-      <p class="section-label">Also</p>
-      <ul class="also-list">
-        <li><strong>fAIr Farming</strong> — 2nd place out of 10+ teams at the CTW Engineering competition, a $5,000 scholarship award. A camera-based OpenCV pipeline mapping vegetation colour signatures to nitrogen content, replacing $10–$70 per-sample lab soil testing.</li>
-        <li><strong>Surfrider Foundation</strong> — built and shipped an interactive climate-scenario calculator to production in React/Next.js and TypeScript/MongoDB, modelling projected mortality and warming under Shared Socioeconomic Pathways. <a href="https://surfrider.vercel.app" target="_blank" rel="noopener">surfrider.vercel.app</a>, growing to 100+ monthly visitors.</li>
-      <li><strong>Data pipelines and retrieval, Cal Poly CS Department</strong> — built an automated web-mining pipeline over 400+ club and 2,000+ faculty records, eliminating 3–4 hours of daily manual collection; built vector-embedding indexing with cosine similarity search across 10,000+ records; cut LLM API costs 50% by refactoring sequential calls into asynchronous batches.</li>
-      </ul>
     </div>
 
     <div class="section">
