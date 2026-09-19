@@ -165,6 +165,38 @@ D_ref   = 2.0 × (dmax_scene_1 / dmax)^s  # power-law refinement, s = 3.2</code>
         <figcaption>Offline validation run over field footage, with live per-zone coverage percentages overlaid.</figcaption>
       </figure>
 
+      <h3>Field footage</h3>
+
+      <p>Three beds at the Cal Poly plots, recorded from a downward-facing camera on the implement — the rail and wheels sit in the corner of frame throughout. This is raw capture with no overlay, and between them the three beds span the range of canopy structure a coverage threshold has to survive.</p>
+
+      <div class="video-grid">
+
+        <figure>
+          <video controls preload="none" playsinline muted loop poster="assets/tsmg/field/broccoli.jpg">
+            <source src="assets/tsmg/field/broccoli.mp4" type="video/mp4" />
+            Your browser does not support embedded video. <a href="assets/tsmg/field/broccoli.mp4">Download the clip</a>.
+          </video>
+          <figcaption><span class="crop">Broccoli</span>Closed canopy with leaves overlapping across the bed and very little exposed soil. Almost every zone clears threshold, so the system converges toward broadcast behavior — the easy case, and the one where it saves the least.</figcaption>
+        </figure>
+
+        <figure>
+          <video controls preload="none" playsinline muted loop poster="assets/tsmg/field/cabbage.jpg">
+            <source src="assets/tsmg/field/cabbage.mp4" type="video/mp4" />
+            Your browser does not support embedded video. <a href="assets/tsmg/field/cabbage.mp4">Download the clip</a>.
+          </video>
+          <figcaption><span class="crop">Cabbage</span>Discrete heads separated by bare soil, staggered across the bed rather than aligned to it. Zones flip on and off as the implement advances — the case that motivated hysteresis appearing in the limitations below.</figcaption>
+        </figure>
+
+        <figure>
+          <video controls preload="none" playsinline muted loop poster="assets/tsmg/field/pepper.jpg">
+            <source src="assets/tsmg/field/pepper.mp4" type="video/mp4" />
+            Your browser does not support embedded video. <a href="assets/tsmg/field/pepper.mp4">Download the clip</a>.
+          </video>
+          <figcaption><span class="crop">Pepper</span>Isolated plants against mostly bare ground, with fruit breaking the green-on-brown assumption a colour-threshold approach would lean on. Sparse coverage is where zone gating pays for itself.</figcaption>
+        </figure>
+
+      </div>
+
       <h3>Bringing up the hardware</h3>
 
       <p>The GPIO work was staged so that each step isolated exactly one unknown — a habit that pays for itself the first time something doesn't work and you know precisely which layer to blame.</p>

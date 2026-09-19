@@ -666,3 +666,22 @@ mjx-container[display="true"] {
   padding-bottom: 0.35rem;
 }
 mjx-container { max-width: 100%; }
+
+/* Field footage grid */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.75rem;
+  margin: 2.5rem 0;
+}
+.video-grid figure { margin: 0; }
+.video-grid video { width: 100%; }
+.video-grid figcaption { text-align: left; margin-top: 0.7rem; }
+.video-grid .crop {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #111;
+  margin-bottom: 0.3rem;
+}
