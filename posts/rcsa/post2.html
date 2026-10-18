@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rebuilding the Field from a Moving Camera — Ivan Torriani</title>
+  <meta name="description" content="Camera pose and scene depth recovered from a ground robot's own motion — keyframing on measured drift, masking the rig out of its own camera track, and straightening the arc that chained window alignments bend into the trajectory." />
+  <link rel="stylesheet" href="../../css/minimal.css" />
+  <link rel="icon" href="../../icon_2.png" type="image/x-icon" />
+</head>
+<body>
+  <header class="page-header">
+    <h1>Rebuilding the Field from a Moving Camera</h1>
+    <a class="back" href="../../rcsa.html">← Monocular Ego-Motion Mapping</a>
+  </header>
+
+  <main>
+    <article>
+      <p class="post-meta">October 16, 2026</p>
+
+      <p class="lede">The goal is a single command that takes the name of a crop, finds the three videos the robot recorded for it, and returns an interactive 3D field with one bounding box around every plant. You type <code>cabbage</code>, and a few minutes later a browser page opens that you can orbit, zoom and inspect, each box carrying the plant's position, its size, and how many frames it was seen in.</p>
+
+      <p>Everything below runs locally on an Apple M4 with 16&nbsp;GB of shared memory and no NVIDIA GPU. That is not an aside — it is the constraint behind most of the library choices, and behind the decision to reconstruct one camera properly rather than three badly.</p>
+
+      <h3>Why there is no stereo to use</h3>
+
+      <p>Three cameras sounds like a rig you can triangulate from. It isn't. Two sit at ground level inside the canopy pointing roughly opposite ways, and the third looks straight down at the bed — so a cabbage seen from the side and the same cabbage seen from directly above share almost no matchable features. <strong>The usual multi-view approach, fusing several simultaneous views of one instant, has nothing to work with.</strong></p>
+
+      <p>Depth comes from motion instead. The robot drives, so each camera on its own is a monocular sequence with real temporal baseline, which is enough to recover geometry. The overhead camera is reconstructed first, because it is the one that sees the field as a field.</p>
+
+      <h3>Libraries, and what each was chosen over</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">VGGT</span><span class="v">Takes a set of images and returns camera poses, depth maps and 3D point maps in one forward pass. Chosen over DUSt3R and MASt3R, which compare images pairwise and then need a separate global alignment step to stitch those pairs together — VGGT solves a whole window jointly, so that stage disappears.</span></li>
+        <li><span class="k">PyTorch</span><span class="v">Runs VGGT through Apple's Metal backend to reach the M4's GPU. Chosen over MLX, which is faster on Apple silicon but has no VGGT implementation. The VLM track does use MLX, so the two live in separate environments.</span></li>
+        <li><span class="k">YOLOE</span><span class="v">Finds crops from a text prompt such as "cabbage head", and returns a mask rather than a rectangle. Chosen over stock YOLO, whose fixed 80-class list contains broccoli but neither cabbage nor peppers.</span></li>
+        <li><span class="k">Open3D</span><span class="v">Plane fitting, voxel downsampling, outlier removal, clustering. Chosen over assembling trimesh, SciPy and scikit-learn, which cover the same ground less tidily — and it had a working Python 3.13 build, which several alternatives did not.</span></li>
+        <li><span class="k">Plotly</span><span class="v">Renders the field as a single self-contained HTML file. Chosen over OpenGL and Open3D's own viewer, both of which require the software installed locally to see anything.</span></li>
+        <li><span class="k">OpenCV</span><span class="v">Decode, frame-to-frame motion, and the image processing behind keyframe choice and rig masking. Chosen over PyAV or imageio because the same library also provides the optical flow and morphology those stages depend on.</span></li>
+      </ul>
+
+      <h3>Pipeline</h3>
+
+      <figure>
+        <svg class="diagram" viewBox="0 0 740 262" role="img" aria-label="Pipeline: three clips feed keyframe selection, which branches into a reconstruction lane of rig masking, VGGT reconstruction and drift flattening, and a detection lane running YOLOE; the two lanes rejoin at box lifting, which feeds the interactive viewer.">
+          <defs>
+            <marker id="r-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+            </marker>
+          </defs>
+
+          <!-- main chain -->
+          <rect class="box" x="6"   y="100" width="100" height="48" rx="2"/>
+          <rect class="box" x="126" y="100" width="100" height="48" rx="2"/>
+          <rect class="box" x="246" y="100" width="100" height="48" rx="2"/>
+          <rect class="box" x="366" y="100" width="100" height="48" rx="2"/>
+          <rect class="box" x="486" y="100" width="100" height="48" rx="2"/>
+          <rect class="box" x="606" y="100" width="100" height="48" rx="2"/>
+
+          <text class="lbl" x="56"  y="120" text-anchor="middle">three clips</text>
+          <text class="lbl" x="56"  y="136" text-anchor="middle" fill="#888">640×480, 15fps</text>
+          <text class="lbl" x="176" y="120" text-anchor="middle">keyframes.py</text>
+          <text class="lbl" x="176" y="136" text-anchor="middle" fill="#888">picked on drift</text>
+          <text class="lbl" x="296" y="120" text-anchor="middle">rig_mask.py</text>
+          <text class="lbl" x="296" y="136" text-anchor="middle" fill="#888">hide the rig</text>
+          <text class="lbl" x="416" y="120" text-anchor="middle">reconstruct.py</text>
+          <text class="lbl" x="416" y="136" text-anchor="middle" fill="#888">VGGT windows</text>
+          <text class="lbl" x="536" y="120" text-anchor="middle">flatten.py</text>
+          <text class="lbl" x="536" y="136" text-anchor="middle" fill="#888">unbend the row</text>
+          <text class="lbl" x="656" y="120" text-anchor="middle">lift_boxes.py</text>
+          <text class="lbl" x="656" y="136" text-anchor="middle" fill="#888">masks + depth</text>
+
+          <line class="flow" x1="106" y1="124" x2="124" y2="124" marker-end="url(#r-ah)"/>
+          <line class="flow" x1="226" y1="124" x2="244" y2="124" marker-end="url(#r-ah)"/>
+          <line class="flow" x1="346" y1="124" x2="364" y2="124" marker-end="url(#r-ah)"/>
+          <line class="flow" x1="466" y1="124" x2="484" y2="124" marker-end="url(#r-ah)"/>
+          <line class="flow" x1="586" y1="124" x2="604" y2="124" marker-end="url(#r-ah)"/>
+
+          <!-- detection lane, branching off the same keyframes -->
+          <rect class="box" x="366" y="194" width="100" height="48" rx="2"/>
+          <text class="lbl" x="416" y="214" text-anchor="middle">detect.py</text>
+          <text class="lbl" x="416" y="230" text-anchor="middle" fill="#888">YOLOE prompts</text>
+
+          <path class="flow" d="M 176 148 L 176 218 L 364 218" marker-end="url(#r-ah)"/>
+          <path class="flow" d="M 466 218 L 656 218 L 656 150" marker-end="url(#r-ah)"/>
+
+          <!-- viewer -->
+          <rect class="box" x="606" y="18" width="100" height="48" rx="2"/>
+          <text class="lbl" x="656" y="38" text-anchor="middle">viewer.py</text>
+          <text class="lbl" x="656" y="54" text-anchor="middle" fill="#888">HTML field</text>
+
+          <line class="flow" x1="656" y1="100" x2="656" y2="68" marker-end="url(#r-ah)"/>
+
+          <text class="lbl-sm" x="416" y="258" text-anchor="middle">every stage caches — a re-run redoes only what is missing</text>
+        </svg>
+        <figcaption>Seven stages, each writing to disk before the next begins. Detection runs off the same keyframes as reconstruction but does not depend on it, so the two lanes stay independent until their results are combined.</figcaption>
+      </figure>
+
+      <p>The caching is not housekeeping, it is what makes the thing usable: one stage takes a quarter of an hour and the rest take seconds.</p>
+
+      <h3>Keyframes chosen by measured drift</h3>
+
+      <p>The robot drives in bursts: long stationary stretches, then quick movement. Fixed-rate sampling is wrong in both directions — effort wasted where nothing new is visible, frames skipped where the view changes most. So keyframes are taken on measured image shift rather than on a clock, and the spacing turns out to be the single most consequential parameter in the pipeline. VGGT solves jointly across a window, so it needs heavy mutual co-visibility; past a certain drift the reconstruction stops being a soil plane with separable cabbage heads and becomes an undifferentiated curtain.</p>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr><th>Drift between keyframes</th><th>Ground-plane inliers</th><th>Trajectory straightness</th><th>Depth confidence</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight"><td class="num">2.5% of frame width</td><td class="num">46%</td><td class="num">9.7</td><td class="num">3.1</td></tr>
+            <tr><td class="num">5%</td><td class="num">31%</td><td class="num">5.2</td><td class="num">1.1</td></tr>
+            <tr><td class="num">10%</td><td class="num">32%</td><td class="num">4.6</td><td class="num">1.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Measured, not guessed. Window size was swept the same way — 16 frames beat both 8 and 24 — and keeping only the top fifth of points by confidence lifted plane inliers from 46% to 55%.</p>
+
+      <p>There is a trap on the other side of this, worth stating because it inverts the usual intuition: <strong>a parked camera produces a reconstruction that looks far cleaner than a moving one.</strong> With no baseline, VGGT falls back on its monocular depth prior — the output is plausible, not triangulated, and cannot be stitched to anything. That is why stationary stretches are dropped rather than sampled.</p>
+
+      <h3>Masking the robot out of its own footage</h3>
+
+      <p>The rig's rails, wheels and sibling cameras appear in every frame, and because they are bolted to the camera they never move relative to it. A reconstruction solver reads that as a stationary piece of world geometry while the field streams past, which corrupts the camera track. The fix exploits exactly the property that causes the problem: average hundreds of frames together and the field blurs into nothing while the hardware, identical in every frame, stays sharp enough to cut out.</p>
+
+      <h3>Pose chaining, and the drift it accumulates</h3>
+
+      <p>VGGT holds about sixteen frames at a time, so a long clip is processed in overlapping windows, each returning its own coordinate system. Frames shared between neighbouring windows supply the matching points to line them up, and chaining those alignments walks the whole clip into one frame of reference.</p>
+
+      <p>Every alignment carries a tiny rotation error, though, and composing thirty-five of them bends the entire field into an arc. The reconstruction cannot know the bed is flat — but we do. The flattening stage walks the row, measures where the soil actually sits, subtracts that profile, and replaces the arbitrary axes with the robot's real direction of travel. That last substitution is what finally separates the two planting rows.</p>
+
+      <h3>Detection without a training set</h3>
+
+      <p>Detection runs open-vocabulary, on text prompts like "cabbage head", for a blunt reason: stock YOLO's class list has no cabbage in it. YOLOE returns masks rather than rectangles, which matters more than it sounds — a rectangle drawn around a plant seen from directly above is mostly soil, and that soil would inflate the 3D box lifted from it.</p>
+
+      <p>Lifting reads the reconstructed depth underneath each mask and converts those pixels into a 3D blob. One plant appears in dozens of consecutive keyframes, so the blobs are clustered until each real plant has exactly one box. Per-frame recall is partial — roughly 60% of visible plants, with the misses concentrated in heavy occlusion — and clustering across many keyframes closes most of that gap.</p>
+
+      <h3>The map</h3>
+
+      <figure>
+        <img src="../../assets/rcsa/field_topdown.png" alt="Top-down view of the reconstructed cabbage bed, two rows of plants outlined by orange bounding boxes" loading="lazy" />
+        <figcaption>The reconstructed cabbage bed from above, drawn to true proportions. Orange rectangles are the 93 detected plants, and the two planting rows separate cleanly once drift correction has straightened the coordinate frame. Every pixel averages the video colours of the points that landed there, so dark areas are places nothing was reconstructed.</figcaption>
+      </figure>
+
+      <div class="link-row">
+        <a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3_boxes.html" target="_blank" rel="noopener">Interactive field — boxes</a>
+        <a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3.html" target="_blank" rel="noopener">With point cloud</a>
+      </div>
+
+      <p>Five preset cameras switch between top-down, along the row, across the row, oblique and ground level. The last two are the ones worth dwelling on: the overhead camera never occupied those positions, so being able to look along the row from ground level is the reconstruction actually doing its job rather than replaying its input. Hovering a box reports the plant's identifier, its dimensions, and how many frames it was found in.</p>
+
+      <p>Those measurements are consistent with each other but carry no real-world units, because reconstruction from a single moving camera recovers shape without scale. One known distance — the overhead camera's height above the soil is the easiest — converts everything to centimetres. It is deliberately left as a one-line change rather than guessed at.</p>
+
+      <h3>Runtime</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">Reconstruction</span><span class="v">~26 s per 16-frame window on MPS</span></li>
+        <li><span class="k">Default run</span><span class="v">360 keyframes, about 15 minutes</span></li>
+        <li><span class="k">Whole clip</span><span class="v">Well over an hour</span></li>
+      </ul>
+
+      <h3>Limitations</h3>
+
+      <div class="limitations">
+        <ul>
+          <li>Every keyframe contributes its own depth estimate and the estimates are stacked rather than fused, so the soil surface comes out almost as thick as the plants are tall. Fusing them into a single surface is the most valuable outstanding improvement, and it would make every measurement taken from the map more trustworthy.</li>
+          <li>Reconstruction quality is moderate. 640×480 footage, a low camera and a self-similar canopy all work against it — the same repeated-texture problem the NSF snap-bean work describes.</li>
+          <li>Detection is open-vocabulary with no training, so per-frame recall sits near 60%; a model fine-tuned on hand-labelled frames would recover the occluded misses.</li>
+          <li>Measurements are unitless until a single real-world distance is supplied.</li>
+          <li>Registering the two ground-level cameras into the same coordinate frame is not built yet. The plan exploits the rigid rig: all three trajectories are one curve up to a fixed transform, solvable without any visual overlap — and the side profiles are exactly where a plant's height and shape live.</li>
+        </ul>
+      </div>
+
+    </article>
+
+    <nav class="post-nav">
+      <a href="post1.html">← The VLM Baseline, and the Crop It Got Wrong</a>
+      <span class="spacer"></span>
+    </nav>
+  </main>
+
+</body>
+</html>

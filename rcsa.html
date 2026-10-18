@@ -41,9 +41,9 @@
 
       <p class="lede">A mobile robot that wants to act on its surroundings needs two things from its cameras: where it has been, and what is where. This one gets both out of a single moving sensor — no stereo baseline, no LiDAR, no external positioning — and lands on an object-level 3D map of the row it just drove, with one box around every plant in it. The navigation problems underneath that are the ordinary ones: keyframing, pose estimation, accumulated drift, degenerate motion, and scale.</p>
 
-      <p>What the map is <em>for</em> is harvest readiness, which is two questions wearing one coat. What is this plant and what stage has it reached — and where exactly is it, so a machine can go and do something about it. A ripeness judgement with no position is a fact about a photograph; a position with no judgement is a map of nothing in particular. This project builds both halves against the same field footage, and the more interesting result is what happened when they were pointed at each other.</p>
+      <p>What the map is <em>for</em> is harvest readiness, which is two questions wearing one coat. What is this plant and what stage has it reached — and where exactly is it, so a machine can go and do something about it. A ripeness judgement with no position is a fact about a photograph; a position with no judgement is a map of nothing in particular. The project builds both halves against the same field footage, and the more interesting result is what happened when they were pointed at each other.</p>
 
-      <p>The platform is a farm-ng AMIGA driven down rows of cabbage, broccoli and peppers, carrying three cameras recording at 640×480 and 15 frames per second. Everything downstream runs locally on an Apple M4 with 16&nbsp;GB of shared memory and no NVIDIA GPU, which is a constraint that shows up in nearly every design decision below.</p>
+      <p>The platform is a farm-ng AMIGA driven down rows of cabbage, broccoli and peppers, carrying three cameras recording at 640×480 and 15 frames per second. Everything downstream runs locally on an Apple M4 with 16&nbsp;GB of shared memory and no NVIDIA GPU, which is a constraint that shows up in nearly every design decision across both tracks.</p>
 
       <div class="figure-row">
         <div class="stat">
@@ -60,148 +60,26 @@
         </div>
       </div>
 
-      <h3>Why there is no stereo to use</h3>
+      <h3>Posts</h3>
 
-      <p>Three cameras sounds like a rig you can triangulate from. It isn't. Two sit at ground level inside the canopy pointing roughly opposite ways, and the third looks straight down at the bed — so a cabbage seen from the side and the same cabbage seen from directly above share almost no matchable features. <strong>The usual multi-view approach, fusing several simultaneous views of one instant, has nothing to work with.</strong></p>
+      <p>The two tracks were built in order, and each is written up on its own. The first establishes what off-the-shelf models already manage from a single frame; the second builds the geometry that the first turned out to need.</p>
 
-      <p>Depth comes from motion instead. The robot drives, so each camera on its own is a monocular sequence with real temporal baseline, which is enough to recover geometry. The overhead camera is reconstructed first, because it is the one that sees the field as a field.</p>
-
-      <h3>Pipeline</h3>
-
-      <figure>
-        <svg class="diagram" viewBox="0 0 740 262" role="img" aria-label="Pipeline: three clips feed keyframe selection, which branches into a reconstruction lane of rig masking, VGGT reconstruction and drift flattening, and a detection lane running YOLOE; the two lanes rejoin at box lifting, which feeds the interactive viewer.">
-          <defs>
-            <marker id="r-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
-            </marker>
-          </defs>
-
-          <!-- main chain -->
-          <rect class="box" x="6"   y="100" width="100" height="48" rx="2"/>
-          <rect class="box" x="126" y="100" width="100" height="48" rx="2"/>
-          <rect class="box" x="246" y="100" width="100" height="48" rx="2"/>
-          <rect class="box" x="366" y="100" width="100" height="48" rx="2"/>
-          <rect class="box" x="486" y="100" width="100" height="48" rx="2"/>
-          <rect class="box" x="606" y="100" width="100" height="48" rx="2"/>
-
-          <text class="lbl" x="56"  y="120" text-anchor="middle">three clips</text>
-          <text class="lbl" x="56"  y="136" text-anchor="middle" fill="#888">640×480, 15fps</text>
-          <text class="lbl" x="176" y="120" text-anchor="middle">keyframes.py</text>
-          <text class="lbl" x="176" y="136" text-anchor="middle" fill="#888">picked on drift</text>
-          <text class="lbl" x="296" y="120" text-anchor="middle">rig_mask.py</text>
-          <text class="lbl" x="296" y="136" text-anchor="middle" fill="#888">hide the rig</text>
-          <text class="lbl" x="416" y="120" text-anchor="middle">reconstruct.py</text>
-          <text class="lbl" x="416" y="136" text-anchor="middle" fill="#888">VGGT windows</text>
-          <text class="lbl" x="536" y="120" text-anchor="middle">flatten.py</text>
-          <text class="lbl" x="536" y="136" text-anchor="middle" fill="#888">unbend the row</text>
-          <text class="lbl" x="656" y="120" text-anchor="middle">lift_boxes.py</text>
-          <text class="lbl" x="656" y="136" text-anchor="middle" fill="#888">masks + depth</text>
-
-          <line class="flow" x1="106" y1="124" x2="124" y2="124" marker-end="url(#r-ah)"/>
-          <line class="flow" x1="226" y1="124" x2="244" y2="124" marker-end="url(#r-ah)"/>
-          <line class="flow" x1="346" y1="124" x2="364" y2="124" marker-end="url(#r-ah)"/>
-          <line class="flow" x1="466" y1="124" x2="484" y2="124" marker-end="url(#r-ah)"/>
-          <line class="flow" x1="586" y1="124" x2="604" y2="124" marker-end="url(#r-ah)"/>
-
-          <!-- detection lane, branching off the same keyframes -->
-          <rect class="box" x="366" y="194" width="100" height="48" rx="2"/>
-          <text class="lbl" x="416" y="214" text-anchor="middle">detect.py</text>
-          <text class="lbl" x="416" y="230" text-anchor="middle" fill="#888">YOLOE prompts</text>
-
-          <path class="flow" d="M 176 148 L 176 218 L 364 218" marker-end="url(#r-ah)"/>
-          <path class="flow" d="M 466 218 L 656 218 L 656 150" marker-end="url(#r-ah)"/>
-
-          <!-- viewer -->
-          <rect class="box" x="606" y="18" width="100" height="48" rx="2"/>
-          <text class="lbl" x="656" y="38" text-anchor="middle">viewer.py</text>
-          <text class="lbl" x="656" y="54" text-anchor="middle" fill="#888">HTML field</text>
-
-          <line class="flow" x1="656" y1="100" x2="656" y2="68" marker-end="url(#r-ah)"/>
-
-          <text class="lbl-sm" x="416" y="258" text-anchor="middle">every stage caches — a re-run redoes only what is missing</text>
-        </svg>
-        <figcaption>Seven stages, each writing to disk before the next begins. Detection runs off the same keyframes as reconstruction but does not depend on it, so the two lanes stay independent until their results are combined.</figcaption>
-      </figure>
-
-      <p>The caching is not housekeeping, it is what makes the thing usable: one stage takes a quarter of an hour and the rest take seconds. A single command — the name of a crop — finds the three clips, runs what is missing, and opens a browser page you can orbit, zoom and inspect, with one box around every plant.</p>
-
-      <h3>Keyframes chosen by measured drift</h3>
-
-      <p>The robot drives in bursts: long stationary stretches, then quick movement. Fixed-rate sampling is wrong in both directions — effort wasted where nothing new is visible, frames skipped where the view changes most. So keyframes are taken on measured image shift rather than on a clock, and the spacing turns out to be the single most consequential parameter in the pipeline. VGGT solves jointly across a window, so it needs heavy mutual co-visibility; past a certain drift the reconstruction stops being a soil plane with separable cabbage heads and becomes an undifferentiated curtain.</p>
-
-      <div class="table-wrap">
-        <table class="results-table">
-          <thead>
-            <tr><th>Drift between keyframes</th><th>Ground-plane inliers</th><th>Trajectory straightness</th><th>Depth confidence</th></tr>
-          </thead>
-          <tbody>
-            <tr class="highlight"><td class="num">2.5% of frame width</td><td class="num">46%</td><td class="num">9.7</td><td class="num">3.1</td></tr>
-            <tr><td class="num">5%</td><td class="num">31%</td><td class="num">5.2</td><td class="num">1.1</td></tr>
-            <tr><td class="num">10%</td><td class="num">32%</td><td class="num">4.6</td><td class="num">1.0</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">Measured, not guessed. Window size was swept the same way — 16 frames beat both 8 and 24 — and keeping only the top fifth of points by confidence lifted plane inliers from 46% to 55%.</p>
-
-      <p>There is a trap on the other side of this, worth stating because it inverts the usual intuition: <strong>a parked camera produces a reconstruction that looks far cleaner than a moving one.</strong> With no baseline, VGGT falls back on its monocular depth prior — the output is plausible, not triangulated, and cannot be stitched to anything. That is why stationary stretches are dropped rather than sampled.</p>
-
-      <h3>Masking the robot out of its own footage</h3>
-
-      <p>The AMIGA's rails, wheels and sibling cameras appear in every frame, and because they are bolted to the camera they never move relative to it. A reconstruction solver reads that as a stationary piece of world geometry while the field streams past, which corrupts the camera track. The fix exploits exactly the property that causes the problem: average hundreds of frames together and the field blurs into nothing while the hardware, identical in every frame, stays sharp enough to cut out.</p>
-
-      <h3>Pose chaining, and the drift it accumulates</h3>
-
-      <p>VGGT holds about sixteen frames at a time, so a long clip is processed in overlapping windows, each returning its own coordinate system. Frames shared between neighbouring windows supply the matching points to line them up, and chaining those alignments walks the whole clip into one frame of reference.</p>
-
-      <p>Every alignment carries a tiny rotation error, though, and composing thirty-five of them bends the entire field into an arc. The reconstruction cannot know the bed is flat — but we do. The flattening stage walks the row, measures where the soil actually sits, subtracts that profile, and replaces the arbitrary axes with the robot's real direction of travel. That last substitution is what finally separates the two planting rows.</p>
-
-      <h3>Detection without a training set</h3>
-
-      <p>Detection runs open-vocabulary, on text prompts like "cabbage head", for a blunt reason: stock YOLO's fixed 80-class list contains broccoli but neither cabbage nor peppers. YOLOE returns masks rather than rectangles, which matters more than it sounds — a rectangle drawn around a plant seen from directly above is mostly soil, and that soil would inflate the 3D box lifted from it.</p>
-
-      <p>Lifting reads the reconstructed depth underneath each mask and converts those pixels into a 3D blob. One plant appears in dozens of consecutive keyframes, so the blobs are clustered until each real plant has exactly one box. Per-frame recall is partial — roughly 60% of visible plants, with the misses concentrated in heavy occlusion — and clustering across many keyframes closes most of that gap.</p>
+      <ul class="log-list">
+        <li><a href="posts/rcsa/post1.html"><span class="date">Sep 28, 2026</span>The VLM Baseline, and the Crop It Got Wrong</a></li>
+        <li><a href="posts/rcsa/post2.html"><span class="date">Oct 16, 2026</span>Rebuilding the Field from a Moving Camera</a></li>
+      </ul>
 
       <h3>The map</h3>
 
       <figure>
         <img src="assets/rcsa/field_topdown.png" alt="Top-down view of the reconstructed cabbage bed, two rows of plants outlined by orange bounding boxes" loading="lazy" />
-        <figcaption>The reconstructed cabbage bed from above, drawn to true proportions. Orange rectangles are the 93 detected plants, and the two planting rows separate cleanly once drift correction has straightened the coordinate frame. Every pixel averages the video colours of the points that landed there, so dark areas are places nothing was reconstructed.</figcaption>
+        <figcaption>The reconstructed cabbage bed from above, drawn to true proportions — 93 plants, and two planting rows that separate cleanly once drift correction has straightened the coordinate frame. Dark areas are places nothing was reconstructed.</figcaption>
       </figure>
 
       <div class="link-row">
         <a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3_boxes.html" target="_blank" rel="noopener">Interactive field — boxes</a>
         <a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3.html" target="_blank" rel="noopener">With point cloud</a>
       </div>
-
-      <p>Five preset cameras switch between top-down, along the row, across the row, oblique and ground level. The last two are the ones worth dwelling on: the overhead camera never occupied those positions, so being able to look along the row from ground level is the reconstruction actually doing its job rather than replaying its input. Hovering a box reports the plant's identifier, its dimensions, and how many frames it was found in.</p>
-
-      <p>Those measurements are consistent with each other but carry no real-world units, because reconstruction from a single moving camera recovers shape without scale. One known distance — the overhead camera's height above the soil is the easiest — converts everything to centimetres. It is deliberately left as a one-line change rather than guessed at.</p>
-
-      <h3>The VLM baseline</h3>
-
-      <p>The second track asks the simpler-looking question: shown one frame, can a vision-language model name the crop and judge its growth stage? Three models got an identical set of 72 frames and an identical prompt, all running locally on the M4 — which rules out the largest models and makes speed a real criterion rather than an afterthought.</p>
-
-      <div class="table-wrap">
-        <table class="results-table">
-          <thead>
-            <tr><th>Model</th><th>Crop accuracy</th><th>Mean latency</th><th>Total run</th></tr>
-          </thead>
-          <tbody>
-            <tr class="highlight"><td>qwen3.5-4b</td><td class="num">100%</td><td class="num">4.75 s</td><td class="num">5.7 min</td></tr>
-            <tr><td>molmo2-8b</td><td class="num">67%</td><td class="num">32.16 s</td><td class="num">38.6 min</td></tr>
-            <tr><td>gemma4-e4b</td><td class="num">65%</td><td class="num">5.82 s</td><td class="num">7.0 min</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">All three returned valid schema-conforming output on every one of the 216 calls, so reliability was never the limitation. Qwen ran seven times quicker than Molmo for better results.</p>
-
-      <p>Crop identification, then, is evidently within reach of a four-billion-parameter model on a laptop. Growth stage is where the picture falls apart. It has no ground truth, so the strongest available signal is whether independently trained models agree — and <strong>all three agree on the stage for 2 of 72 frames.</strong> Molmo and Qwen agree 11% of the time, which is close to what random labelling would produce.</p>
-
-      <h3>What the overhead camera settled</h3>
-
-      <p>Every model called the pepper clips "tomato". So did the manifest's ground truth, which is why Qwen scored a flawless 100%. The overhead camera from the reconstruction track later settled it: the plants are unmistakably chili peppers. The ground truth was wrong, the models were wrong, and the benchmark quietly rewarded the error.</p>
-
-      <p>This is the clearest argument for the reconstruction track, and it is an argument about geometry rather than models. A ground-level camera buried in foliage sees red fruit on a bushy plant, and tomato is a reasonable guess from there; the view from directly above resolves the shape immediately. <strong>Perspective was doing more work than model choice.</strong></p>
 
       <h3>System</h3>
 
@@ -215,18 +93,7 @@
         <li><span class="k">Runtime</span><span class="v">VGGT at ~26 s per window on MPS; a 360-keyframe run takes about 15 minutes</span></li>
       </ul>
 
-      <h3>Limitations</h3>
-
-      <div class="limitations">
-        <ul>
-          <li>Every keyframe contributes its own depth estimate and the estimates are stacked rather than fused, so the soil surface comes out almost as thick as the plants are tall. Fusing them into a single surface is the most valuable outstanding improvement.</li>
-          <li>Reconstruction quality is moderate, and 640×480 footage, a low camera and a self-similar canopy are all working against it — the same repeated-texture problem the NSF snap-bean work describes.</li>
-          <li>Detection is open-vocabulary with no training, so per-frame recall sits near 60%; a model fine-tuned on hand-labelled frames would recover the occluded misses.</li>
-          <li>Measurements are unitless until a single real-world distance is supplied.</li>
-          <li>Registering the two ground-level cameras into the same coordinate frame is not built yet. The plan exploits the rigid rig: all three trajectories are one curve up to a fixed transform, solvable without any visual overlap.</li>
-          <li>Growth stage needs labels before it needs better models — without ground truth there is no way to tell a good answer from a confident one. The frames where the three models disagree are the ones worth labelling first.</li>
-        </ul>
-      </div>
+      <h3>Where it goes</h3>
 
       <p>The two tracks are meant to meet. A stage judgement is far more useful attached to a specific plant at a known position than to an anonymous frame, which is precisely what the reconstruction produces — feeding each detected plant's cropped image to a VLM, rather than a whole frame, gives per-plant ripeness on a field map the robot can act on. An AMIGA that can drive a row, build this model, and mark which cabbages, broccoli heads and peppers are ready turns a question farmers answer by walking the field into one answered by driving it.</p>
 

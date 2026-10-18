@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The VLM Baseline, and the Crop It Got Wrong — Ivan Torriani</title>
+  <meta name="description" content="Three vision-language models on 72 frames of crop row, scored on crop type and growth stage — and what cross-model agreement reveals when there is no ground truth to score against." />
+  <link rel="stylesheet" href="../../css/minimal.css" />
+  <link rel="icon" href="../../icon_2.png" type="image/x-icon" />
+</head>
+<body>
+  <header class="page-header">
+    <h1>The VLM Baseline, and the Crop It Got Wrong</h1>
+    <a class="back" href="../../rcsa.html">← Monocular Ego-Motion Mapping</a>
+  </header>
+
+  <main>
+    <article>
+      <p class="post-meta">September 28, 2026</p>
+
+      <p class="lede">This track asks a simpler question than the reconstruction work: shown a single frame of a crop row, can a vision-language model name the crop and judge its growth stage? Three models got an identical set of 72 frames and an identical prompt, then were scored against each other. The point was to establish what off-the-shelf models already manage before any training is attempted.</p>
+
+      <p>Everything ran locally on an Apple M4, which rules out the largest models and makes speed a real criterion rather than an afterthought. Crop type has free ground truth, because each source clip contains exactly one crop and the filename records it. Growth stage has no ground truth at all — which turned out to be the more interesting half of the result, and then the half that went wrong in a way the benchmark had no way to catch.</p>
+
+      <h3>Libraries, and what each was chosen over</h3>
+
+      <ul class="spec-list">
+        <li><span class="k">MLX, mlx-vlm</span><span class="v">Runs the models on the M4's GPU. Chosen over PyTorch, whose Apple backend is slower for this workload and lacks quantised builds of these particular models. MLX is Apple's own framework and targets this hardware specifically.</span></li>
+        <li><span class="k">HF Hub</span><span class="v">Fetches and caches the three checkpoints. Chosen over vendoring weights by hand — they are distributed there anyway, and the cache makes repeat runs free.</span></li>
+        <li><span class="k">FFmpeg</span><span class="v">Samples frames out of the clips at a fixed interval. Chosen over OpenCV here because this track needs nothing but decoding, and FFmpeg handles the odd MJPEG files without fuss.</span></li>
+        <li><span class="k">Pillow</span><span class="v">Draws each model's verdict onto the frames to produce review footage. Chosen over matplotlib because the output is a composited image, which is Pillow's job and not matplotlib's.</span></li>
+      </ul>
+
+      <h3>Pipeline</h3>
+
+      <figure>
+        <svg class="diagram" viewBox="0 0 700 250" role="img" aria-label="Pipeline: three field clips feed frame extraction, which produces 72 frames and a manifest consumed by the model runner across three models, whose results feed both a summary of tables and agreement and annotated review footage.">
+          <defs>
+            <marker id="v-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+            </marker>
+          </defs>
+
+          <rect class="box" x="8" y="94" width="116" height="52" rx="2"/>
+          <text class="lbl" x="66" y="115" text-anchor="middle">three clips</text>
+          <text class="lbl" x="66" y="131" text-anchor="middle" fill="#888">cabbage, broccoli, pepper</text>
+
+          <line class="flow" x1="124" y1="120" x2="156" y2="120" marker-end="url(#v-ah)"/>
+
+          <rect class="box" x="158" y="94" width="124" height="52" rx="2"/>
+          <text class="lbl" x="220" y="115" text-anchor="middle">extract_frames.py</text>
+          <text class="lbl" x="220" y="131" text-anchor="middle" fill="#888">72 frames + manifest</text>
+
+          <line class="flow" x1="282" y1="120" x2="314" y2="120" marker-end="url(#v-ah)"/>
+
+          <rect class="box" x="316" y="94" width="124" height="52" rx="2"/>
+          <text class="lbl" x="378" y="115" text-anchor="middle">run_vlm.py</text>
+          <text class="lbl" x="378" y="131" text-anchor="middle" fill="#888">3 models × 72</text>
+
+          <path class="flow" d="M 440 120 L 466 120 L 466 56 L 492 56" marker-end="url(#v-ah)"/>
+          <path class="flow" d="M 440 120 L 466 120 L 466 184 L 492 184" marker-end="url(#v-ah)"/>
+
+          <rect class="box" x="494" y="30" width="124" height="52" rx="2"/>
+          <text class="lbl" x="556" y="51" text-anchor="middle">summarize.py</text>
+          <text class="lbl" x="556" y="67" text-anchor="middle" fill="#888">tables, agreement</text>
+
+          <rect class="box" x="494" y="158" width="124" height="52" rx="2"/>
+          <text class="lbl" x="556" y="179" text-anchor="middle">make_footage.py</text>
+          <text class="lbl" x="556" y="195" text-anchor="middle" fill="#888">annotated review</text>
+
+          <text class="lbl-sm" x="220" y="236" text-anchor="middle">the manifest is the contract — every model reads the same rows</text>
+        </svg>
+        <figcaption>Frame extraction emits a manifest, and every model reads the same rows from it. That is the only reason the three columns of results can be compared at all.</figcaption>
+      </figure>
+
+      <h3>Speed and reliability</h3>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr><th>Model</th><th>Crop accuracy</th><th>Mean latency</th><th>p95</th><th>Total run</th><th>Schema OK</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight"><td>qwen3.5-4b</td><td class="num">100%</td><td class="num">4.75 s</td><td class="num">5.21 s</td><td class="num">5.7 min</td><td class="num">100%</td></tr>
+            <tr><td>molmo2-8b</td><td class="num">67%</td><td class="num">32.16 s</td><td class="num">48.15 s</td><td class="num">38.6 min</td><td class="num">100%</td></tr>
+            <tr><td>gemma4-e4b</td><td class="num">65%</td><td class="num">5.82 s</td><td class="num">10.75 s</td><td class="num">7.0 min</td><td class="num">100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">216 calls, zero parse errors, zero schema violations. Reliability was never the limitation — and Qwen is not just the fastest in the mean but the tightest in the tail, with a p95 barely above it.</p>
+
+      <p>Qwen ran seven times quicker than Molmo for better results, which is the kind of outcome that makes parameter count a poor proxy for anything. On crop identification the task is evidently within reach of a four-billion-parameter model on a laptop.</p>
+
+      <h3>Where the crop answers actually diverge</h3>
+
+      <p>The aggregate accuracies hide the shape of the errors, which is more useful than the score. Broken out per clip, almost all of the loss collapses into a single confusion:</p>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr><th>Model</th><th>Overall</th><th>pepper.mp4 → says</th><th>broccoli.mp4 → says</th><th>cabbage.mp4 → says</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>gemma4-e4b</td><td class="num">65%</td><td>tomato ×24</td><td>cabbage ×24</td><td>cabbage ×23, other ×1</td></tr>
+            <tr><td>molmo2-8b</td><td class="num">67%</td><td>tomato ×24</td><td>cabbage ×24</td><td>cabbage ×24</td></tr>
+            <tr class="highlight"><td>qwen3.5-4b</td><td class="num">100%</td><td>tomato ×24</td><td>broccoli ×24</td><td>cabbage ×24</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Every answer is unanimous within its clip — no model wavers frame to frame. Gemma and Molmo collapse broccoli into cabbage across all 24 of its frames, and that one confusion accounts for their entire deficit bar a single stray cabbage frame. Note what these percentages are scored against: the manifest, which records the pepper clip as tomato — so every model is credited for 24 frames it gets wrong, a point the last section returns to.</p>
+
+      <h3>Stage, and what agreement is standing in for</h3>
+
+      <p>Growth stage has no ground truth, so the strongest available signal is whether independently trained models agree. They do not.</p>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr><th>Pair</th><th>Crop agreement</th><th>Stage agreement</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>gemma4-e4b vs molmo2-8b</td><td class="num">99%</td><td class="num">24%</td></tr>
+            <tr><td>gemma4-e4b vs qwen3.5-4b</td><td class="num">65%</td><td class="num">71%</td></tr>
+            <tr><td>molmo2-8b vs qwen3.5-4b</td><td class="num">67%</td><td class="num">11%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">All three agree on stage for 2 of 72 frames — 3%. The Molmo–Qwen pair agrees 11% of the time, which is close to what random labelling would produce.</p>
+
+      <p>The distribution explains why, and it is worse than disagreement. Each model emits a near-constant stage per crop: Molmo calls every broccoli and every cabbage frame <em>harvest</em>; Qwen calls every broccoli frame <em>middle</em>; Gemma calls both <em>middle</em> throughout. <strong>The stage label is largely a function of which crop the model thinks it is looking at, not of what the plant in the frame is doing.</strong> Agreement is then just a question of whether two models happened to pick the same constant for the same crop — which is exactly what the 99%-crop/24%-stage row is showing.</p>
+
+      <p>That reading matters more than the numbers. A benchmark that scored stage against labels would have reported three mediocre models; what it is actually measuring is that none of them is doing per-frame stage reasoning at all.</p>
+
+      <h3>The crop that was wrong on both sides</h3>
+
+      <figure>
+        <img src="../../assets/rcsa/vlm_compare_pepper.jpg" alt="Three side-by-side annotated frames of the same plant, each labelled with a model's verdict: all three read crop tomato, with stages middle, middle and harvest" loading="lazy" />
+        <figcaption>The same frame of the pepper clip as the three models saw it. All three answer <em>tomato</em>; the stage splits middle / middle / harvest, and the overlay flags the disagreement. Latencies — 3.41 s, 27.80 s, 4.62 s — are visible in the bottom corner.</figcaption>
+      </figure>
+
+      <p>Every model called the pepper clips "tomato". So did the manifest's ground truth, which is why Qwen scored a flawless 100%. The overhead camera from the reconstruction track later settled it: the plants are unmistakably chili peppers. The ground truth was wrong, the models were wrong, and the benchmark quietly rewarded the error.</p>
+
+      <p>This is the clearest argument for the reconstruction track, and it is an argument about geometry rather than models. A ground-level camera buried in foliage sees small orange fruit on a sprawling plant, and tomato is a reasonable guess from there; the view from directly above resolves the shape immediately. <strong>Perspective was doing more work than model choice.</strong></p>
+
+      <h3>What this changes</h3>
+
+      <div class="limitations">
+        <ul>
+          <li>Correcting the pepper mislabel in the manifest is the immediate fix, and it moves Qwen off 100% — which is the honest outcome.</li>
+          <li>Stage assessment needs labels before it needs better models. Without ground truth there is no way to tell a good answer from a confident one, and all three models are confident.</li>
+          <li>The frames where the three disagree are the ones worth labelling first, because they mark exactly where the task is hard. There are 70 of them.</li>
+          <li>A stage judgement is far more useful attached to a specific plant at a known position than to an anonymous frame. Feeding each detected plant's cropped image to a model, rather than a whole frame, is where this track meets the reconstruction one.</li>
+        </ul>
+      </div>
+
+    </article>
+
+    <nav class="post-nav">
+      <span class="spacer"></span>
+      <a href="post2.html">Rebuilding the Field from a Moving Camera →</a>
+    </nav>
+  </main>
+
+</body>
+</html>
