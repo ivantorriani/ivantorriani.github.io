@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RCSA — Robotic Crop Stage Assessment — Ivan Torriani</title>
-  <meta name="description" content="Rebuilding a crop field in 3D from a moving farm robot's cameras, one bounding box per plant, and benchmarking vision-language models on crop stage — the two halves of deciding what is ready to harvest." />
+  <title>Monocular Ego-Motion Mapping on a Mobile Robot (RCSA) — Ivan Torriani</title>
+  <meta name="description" content="Recovering camera pose and scene depth from a ground robot's own motion — no stereo overlap, no LiDAR — into an object-level 3D map, with a vision-language baseline on crop stage alongside it." />
   <link rel="stylesheet" href="css/minimal.css" />
   <link rel="icon" href="/icon_2.png" type="image/x-icon" />
 </head>
@@ -12,8 +12,8 @@
 
   <header class="project-header">
     <a class="back" href="index.html">← Ivan Torriani</a>
-    <h1>Robotic Crop Stage Assessment</h1>
-    <p class="subtitle">Can an autonomous field robot decide for itself which crops are ready to harvest? Two tracks — a 3D field rebuilt from a moving camera, and a vision-language benchmark on growth stage — run against the same footage from a farm-ng AMIGA.</p>
+    <h1>Monocular Ego-Motion Mapping on a Mobile Robot</h1>
+    <p class="subtitle">Camera pose and scene structure recovered from a farm-ng AMIGA's own motion, with no stereo overlap and no LiDAR, into an object-level map of the row it just drove. Built as the Robotic Crop Stage Assessment project, alongside a vision-language baseline on growth stage.</p>
   </header>
 
   <main>
@@ -39,14 +39,16 @@
 
     <article>
 
-      <p class="lede">Harvest readiness is two questions wearing one coat. What is this plant and what stage has it reached — and where exactly is it, so a machine can go and do something about it. A ripeness judgement with no position is a fact about a photograph; a position with no judgement is a map of nothing in particular. This project builds both halves against the same field footage, and the more interesting result is what happened when they were pointed at each other.</p>
+      <p class="lede">A mobile robot that wants to act on its surroundings needs two things from its cameras: where it has been, and what is where. This one gets both out of a single moving sensor — no stereo baseline, no LiDAR, no external positioning — and lands on an object-level 3D map of the row it just drove, with one box around every plant in it. The navigation problems underneath that are the ordinary ones: keyframing, pose estimation, accumulated drift, degenerate motion, and scale.</p>
+
+      <p>What the map is <em>for</em> is harvest readiness, which is two questions wearing one coat. What is this plant and what stage has it reached — and where exactly is it, so a machine can go and do something about it. A ripeness judgement with no position is a fact about a photograph; a position with no judgement is a map of nothing in particular. This project builds both halves against the same field footage, and the more interesting result is what happened when they were pointed at each other.</p>
 
       <p>The platform is a farm-ng AMIGA driven down rows of cabbage, broccoli and peppers, carrying three cameras recording at 640×480 and 15 frames per second. Everything downstream runs locally on an Apple M4 with 16&nbsp;GB of shared memory and no NVIDIA GPU, which is a constraint that shows up in nearly every design decision below.</p>
 
       <div class="figure-row">
         <div class="stat">
           <div class="value">93</div>
-          <div class="label">Plants boxed in the reconstructed cabbage bed</div>
+          <div class="label">Plants mapped as 3D boxes in one driven row</div>
         </div>
         <div class="stat">
           <div class="value">2 / 72</div>
@@ -147,7 +149,7 @@
 
       <p>The AMIGA's rails, wheels and sibling cameras appear in every frame, and because they are bolted to the camera they never move relative to it. A reconstruction solver reads that as a stationary piece of world geometry while the field streams past, which corrupts the camera track. The fix exploits exactly the property that causes the problem: average hundreds of frames together and the field blurs into nothing while the hardware, identical in every frame, stays sharp enough to cut out.</p>
 
-      <h3>Windows, and the bend they accumulate</h3>
+      <h3>Pose chaining, and the drift it accumulates</h3>
 
       <p>VGGT holds about sixteen frames at a time, so a long clip is processed in overlapping windows, each returning its own coordinate system. Frames shared between neighbouring windows supply the matching points to line them up, and chaining those alignments walks the whole clip into one frame of reference.</p>
 
@@ -159,7 +161,7 @@
 
       <p>Lifting reads the reconstructed depth underneath each mask and converts those pixels into a 3D blob. One plant appears in dozens of consecutive keyframes, so the blobs are clustered until each real plant has exactly one box. Per-frame recall is partial — roughly 60% of visible plants, with the misses concentrated in heavy occlusion — and clustering across many keyframes closes most of that gap.</p>
 
-      <h3>The field</h3>
+      <h3>The map</h3>
 
       <figure>
         <img src="assets/rcsa/field_topdown.png" alt="Top-down view of the reconstructed cabbage bed, two rows of plants outlined by orange bounding boxes" loading="lazy" />
