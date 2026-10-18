@@ -560,6 +560,9 @@ figure svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
   padding-bottom: 1px;
 }
 .link-row a:hover { opacity: 0.45; }
+/* Inside an article the row is usually followed by more prose, so it needs
+   the same gap a paragraph would leave. */
+article .link-row { margin-bottom: 2.2rem; }
 
 /* Diagram primitives (inline SVG) */
 .diagram { width: 100%; height: auto; }
