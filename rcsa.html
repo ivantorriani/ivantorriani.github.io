@@ -10,99 +10,54 @@
 </head>
 <body>
 
-  <header class="project-header">
-    <a class="back" href="index.html">← Ivan Torriani</a>
+  <header class="page-header">
     <h1>Monocular Ego-Motion Mapping on a Mobile Robot</h1>
-    <p class="subtitle">Camera pose and scene structure recovered from a farm-ng AMIGA's own motion, with no stereo overlap and no LiDAR, into an object-level map of the row it just drove. Built as the Robotic Crop Stage Assessment project, alongside a vision-language baseline on growth stage.</p>
+    <a class="back" href="index.html">← Ivan Torriani</a>
   </header>
 
   <main>
 
-    <div class="project-meta">
-      <div>
-        <dt>Platform</dt>
-        <dd>farm-ng AMIGA, three-camera rig</dd>
-      </div>
-      <div>
-        <dt>Crops</dt>
-        <dd>Cabbage, broccoli, pepper</dd>
-      </div>
-      <div>
-        <dt>Period</dt>
-        <dd>Sep 2026 – present</dd>
-      </div>
-      <div>
-        <dt>Live</dt>
-        <dd><a href="https://ivantorriani.github.io/rcsa/" target="_blank" rel="noopener">Project page</a></dd>
-      </div>
+    <div class="section">
+      <p class="update-note">Last updated 10/16/26 — reconstruction pipeline posted</p>
+      <p class="intro-text">A mobile robot that wants to act on its surroundings needs two things from its cameras: where it has been, and what is where. This one — a farm-ng AMIGA driven down rows of cabbage, broccoli and peppers — gets both out of a single moving sensor, with no stereo baseline, no LiDAR and no external positioning, and lands on an object-level 3D map of the row it just drove with one box around each of the 93 plants in it. The navigation problems underneath are the ordinary ones: keyframing, pose estimation, accumulated drift, degenerate motion, and scale. The posts below cover the two tracks in the order they were built — a vision-language baseline on crop and growth stage, then the reconstruction that caught it identifying the wrong crop. Everything runs locally on an Apple M4 with 16GB and no NVIDIA GPU.</p>
     </div>
 
-    <article>
-
-      <p class="lede">A mobile robot that wants to act on its surroundings needs two things from its cameras: where it has been, and what is where. This one gets both out of a single moving sensor — no stereo baseline, no LiDAR, no external positioning — and lands on an object-level 3D map of the row it just drove, with one box around every plant in it. The navigation problems underneath that are the ordinary ones: keyframing, pose estimation, accumulated drift, degenerate motion, and scale.</p>
-
-      <p>What the map is <em>for</em> is harvest readiness, which is two questions wearing one coat. What is this plant and what stage has it reached — and where exactly is it, so a machine can go and do something about it. A ripeness judgement with no position is a fact about a photograph; a position with no judgement is a map of nothing in particular. The project builds both halves against the same field footage, and the more interesting result is what happened when they were pointed at each other.</p>
-
-      <p>The platform is a farm-ng AMIGA driven down rows of cabbage, broccoli and peppers, carrying three cameras recording at 640×480 and 15 frames per second. Everything downstream runs locally on an Apple M4 with 16&nbsp;GB of shared memory and no NVIDIA GPU, which is a constraint that shows up in nearly every design decision across both tracks.</p>
-
-      <div class="figure-row">
-        <div class="stat">
-          <div class="value">93</div>
-          <div class="label">Plants mapped as 3D boxes in one driven row</div>
-        </div>
-        <div class="stat">
-          <div class="value">2 / 72</div>
-          <div class="label">Frames where three VLMs agree on growth stage</div>
-        </div>
-        <div class="stat">
-          <div class="value">16 GB</div>
-          <div class="label">Whole pipeline local, no GPU cluster</div>
-        </div>
-      </div>
-
-      <h3>Posts</h3>
-
-      <p>The two tracks were built in order, and each is written up on its own. The first establishes what off-the-shelf models already manage from a single frame; the second builds the geometry that the first turned out to need.</p>
-
-      <ul class="log-list">
-        <li><a href="posts/rcsa/post1.html"><span class="date">Sep 28, 2026</span>The VLM Baseline, and the Crop It Got Wrong</a></li>
-        <li><a href="posts/rcsa/post2.html"><span class="date">Oct 16, 2026</span>Rebuilding the Field from a Moving Camera</a></li>
+    <div class="section">
+      <p class="section-label">Posts</p>
+      <ul class="post-list">
+        <li><a href="posts/rcsa/post1.html">The VLM Baseline, and the Crop It Got Wrong</a></li>
+        <li><a href="posts/rcsa/post2.html">Rebuilding the Field from a Moving Camera</a></li>
       </ul>
+    </div>
 
-      <h3>The map</h3>
+    <div class="section">
+      <p class="section-label">Field Demos</p>
+      <a class="gh-link" href="https://ivantorriani.github.io/rcsa/" target="_blank" rel="noopener">Project Page</a>
+      <table class="model-table">
+        <thead>
+          <tr><th>Reconstruction</th><th>Contents</th><th>Size</th><th>Open</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>cabbage, cam3</td><td>93 plant boxes</td><td>5mb</td><td><a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3_boxes.html" target="_blank" rel="noopener">link</a></td></tr>
+          <tr><td>cabbage, cam3</td><td>boxes + point cloud</td><td>12mb</td><td><a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3.html" target="_blank" rel="noopener">link</a></td></tr>
+        </tbody>
+      </table>
+    </div>
 
-      <figure>
-        <img src="assets/rcsa/field_topdown.png" alt="Top-down view of the reconstructed cabbage bed, two rows of plants outlined by orange bounding boxes" loading="lazy" />
-        <figcaption>The reconstructed cabbage bed from above, drawn to true proportions — 93 plants, and two planting rows that separate cleanly once drift correction has straightened the coordinate frame. Dark areas are places nothing was reconstructed.</figcaption>
-      </figure>
-
-      <div class="link-row">
-        <a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3_boxes.html" target="_blank" rel="noopener">Interactive field — boxes</a>
-        <a href="https://ivantorriani.github.io/rcsa/demo/cabbage_cam3.html" target="_blank" rel="noopener">With point cloud</a>
-      </div>
-
-      <h3>System</h3>
-
-      <ul class="spec-list">
-        <li><span class="k">Reconstruction</span><span class="v">VGGT over 16-frame overlapping windows, chosen over DUSt3R and MASt3R — pairwise methods needing a separate global alignment stage that VGGT dissolves</span></li>
-        <li><span class="k">Detection</span><span class="v">Ultralytics YOLOE, open-vocabulary text prompts, masks rather than boxes</span></li>
-        <li><span class="k">Geometry</span><span class="v">Open3D — plane fitting, voxel downsampling, outlier removal, clustering</span></li>
-        <li><span class="k">Viewer</span><span class="v">Plotly, emitted as one self-contained HTML file that opens offline with nothing installed</span></li>
-        <li><span class="k">Video</span><span class="v">OpenCV for decode, optical flow and the morphology behind keyframing and rig masking</span></li>
-        <li><span class="k">VLM track</span><span class="v">MLX and mlx-vlm on the M4 GPU, Hugging Face Hub, FFmpeg, Pillow — a separate environment from the 3D stack</span></li>
-        <li><span class="k">Runtime</span><span class="v">VGGT at ~26 s per window on MPS; a 360-keyframe run takes about 15 minutes</span></li>
+    <div class="section">
+      <p class="section-label">Links</p>
+      <a class="gh-link" href="https://github.com/ivantorriani/rcsa" target="_blank" rel="noopener">GitHub Repo</a>
+      <ul class="link-list">
+        <li><a href="https://farm-ng.com/" target="_blank" rel="noopener">farm-ng AMIGA — the platform the footage comes from</a></li>
+        <li><a href="https://github.com/facebookresearch/vggt" target="_blank" rel="noopener">VGGT — pose, depth and point maps in one pass</a></li>
+        <li><a href="https://github.com/naver/dust3r" target="_blank" rel="noopener">DUSt3R — the pairwise approach VGGT was chosen over</a></li>
+        <li><a href="https://github.com/naver/mast3r" target="_blank" rel="noopener">MASt3R — the matching-first successor to DUSt3R</a></li>
+        <li><a href="https://github.com/ultralytics/ultralytics" target="_blank" rel="noopener">Ultralytics — YOLOE, open-vocabulary detection by text prompt</a></li>
+        <li><a href="https://github.com/isl-org/Open3D" target="_blank" rel="noopener">Open3D — plane fitting, downsampling, clustering</a></li>
+        <li><a href="https://plotly.com/python/" target="_blank" rel="noopener">Plotly — the self-contained HTML viewer</a></li>
+        <li><a href="https://github.com/ml-explore/mlx" target="_blank" rel="noopener">MLX — Apple-silicon runtime behind the VLM track</a></li>
       </ul>
-
-      <h3>Where it goes</h3>
-
-      <p>The two tracks are meant to meet. A stage judgement is far more useful attached to a specific plant at a known position than to an anonymous frame, which is precisely what the reconstruction produces — feeding each detected plant's cropped image to a VLM, rather than a whole frame, gives per-plant ripeness on a field map the robot can act on. An AMIGA that can drive a row, build this model, and mark which cabbages, broccoli heads and peppers are ready turns a question farmers answer by walking the field into one answered by driving it.</p>
-
-      <div class="link-row">
-        <a href="https://ivantorriani.github.io/rcsa/" target="_blank" rel="noopener">Full project page</a>
-        <a href="https://github.com/ivantorriani/rcsa" target="_blank" rel="noopener">Source</a>
-      </div>
-
-    </article>
+    </div>
 
   </main>
 
